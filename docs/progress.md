@@ -72,7 +72,9 @@
 - [x] P1-W01-D03-BOOT-MainEntry-T01 建立 src/main/index.ts 設定 BrowserWindow（min 1024x768 標題）；驗收：npm run dev 啟動視窗尺寸正確。
   - ✅ 產物：src/main/index.ts（Electron 主進程入口）
   - ✅ 驗收：npm run dev（Vite ready；Electron 使用 ts-node 載入 main 並以 1024x768 最小尺寸啟動）
-- [ ] P1-W01-D03-IPC-IpcIndex-T02 建立 src/main/ipc/index.ts 與 channel 常數，能註冊 file/settings/system handler；驗收：單元測試/手動檢視 IPC handler 載入無錯。
+- [x] P1-W01-D03-IPC-IpcIndex-T02 建立 src/main/ipc/index.ts 與 channel 常數，能註冊 file/settings/system handler；驗收：單元測試/手動檢視 IPC handler 載入無錯。
+  - ✅ 產物：src/main/ipc/index.ts + src/main/ipc/channels.ts（IPC_CHANNELS）
+  - ✅ 驗收：npm run dev（主進程啟動時註冊 file/settings/system handlers，啟動過程無錯）；npm run lint 通過
 - [ ] P1-W01-D03-PRELOAD-PreloadApi-T03 建立 src/main/preload.ts 暴露安全 API（contextBridge）；驗收：renderer console 可讀取 window.api 且無 Node 污染警告。
 
 #### D05（渲染層起步）

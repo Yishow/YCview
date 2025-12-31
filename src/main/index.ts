@@ -1,5 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 
+import { registerIpcHandlers } from './ipc';
+
 const DEV_SERVER_URL = 'http://127.0.0.1:5173';
 
 function createWindow() {
@@ -14,6 +16,8 @@ function createWindow() {
       sandbox: true,
     },
   });
+
+  registerIpcHandlers();
 
   return win.loadURL(DEV_SERVER_URL);
 }
