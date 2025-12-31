@@ -1,3 +1,4 @@
+// Minimal store scaffold (no external deps) for early UI integration.
 export const STORE_SCAFFOLD_VERSION = 1 as const;
 
 export type PanelId = 'left' | 'right';
