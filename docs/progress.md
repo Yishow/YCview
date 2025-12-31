@@ -104,7 +104,10 @@
 - [x] P1-W02-D01-UI-Header-T02 Header 顯示標題與目前路徑 placeholder，含視窗控制按鈕；驗收：UI 顯示與按鈕 hover 狀態。
   - ✅ 產物：src/renderer/components/layout/Header.tsx、postcss.config.js（Tailwind v4 PostCSS plugin 修正）
   - ✅ 驗收：pnpm run dev（手動確認 Header 顯示標題/路徑，視窗按鈕 hover 變化）；pnpm run lint && pnpm exec tsc --noEmit && pnpm exec vite build（通過）
-- [ ] P1-W02-D01-UI-Toolbar-T03 Toolbar 基本按鈕（Copy/Move/Delete/Rename/NewFolder/Refresh）含快捷鍵提示；驗收：按鈕 disabled/hover 狀態正確。
+- [x] P1-W02-D01-UI-Toolbar-T03 Toolbar 基本按鈕（Copy/Move/Delete/Rename/NewFolder/Refresh）含快捷鍵提示；驗收：按鈕 disabled/hover 狀態正確。
+  - ✅ 產物：src/renderer/components/layout/Toolbar.tsx（Toolbar 組件，含 ToolbarButton 子組件）、更新 src/renderer/App.tsx（使用 Toolbar 組件）
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm exec vite build（通過）
+  - ✅ 手動驗收：六個按鈕正確顯示快捷鍵提示（C/M/D/R/F3/F5）；hasSelection=false 時 Copy/Move/Delete/Rename 呈現 disabled 狀態；hover 時邊框變色（accent）且有縮放效果；disabled 按鈕 hover 時顯示提示「需先選取檔案」
 
 #### D03（面板核心）
 

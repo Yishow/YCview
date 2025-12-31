@@ -1,5 +1,6 @@
 import { Header } from './components/layout/Header';
 import { MainLayout } from './components/layout/MainLayout';
+import { Toolbar } from './components/layout/Toolbar';
 import { STORE_SCAFFOLD_VERSION } from './stores';
 
 export default function App() {
@@ -7,18 +8,15 @@ export default function App() {
     <MainLayout
       header={<Header title="WinCV Modern" currentPath="C:\\ (placeholder)" />}
       toolbar={
-        <div className="flex items-center gap-2 px-3 py-2 text-xs">
-          <span className="rounded border border-[var(--color-border)] px-2 py-1">Copy (C)</span>
-          <span className="rounded border border-[var(--color-border)] px-2 py-1">Move (M)</span>
-          <span className="rounded border border-[var(--color-border)] px-2 py-1">Delete (D)</span>
-          <span className="rounded border border-[var(--color-border)] px-2 py-1">Rename (R)</span>
-          <span className="rounded border border-[var(--color-border)] px-2 py-1">
-            NewFolder (F3)
-          </span>
-          <span className="rounded border border-[var(--color-border)] px-2 py-1">
-            Refresh (F5)
-          </span>
-        </div>
+        <Toolbar
+          hasSelection={false}
+          onCopy={() => console.log('[TODO] Copy')}
+          onMove={() => console.log('[TODO] Move')}
+          onDelete={() => console.log('[TODO] Delete')}
+          onRename={() => console.log('[TODO] Rename')}
+          onNewFolder={() => console.log('[TODO] NewFolder')}
+          onRefresh={() => console.log('[TODO] Refresh')}
+        />
       }
       statusBar={
         <div className="flex items-center justify-between gap-3 px-3 py-2 text-xs opacity-80">
