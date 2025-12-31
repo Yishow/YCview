@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron';
+import path from 'node:path';
 
 import { registerIpcHandlers } from './ipc';
 
@@ -13,7 +14,9 @@ function createWindow() {
     title: 'WinCV Modern',
     webPreferences: {
       contextIsolation: true,
+      nodeIntegration: false,
       sandbox: true,
+      preload: path.resolve(__dirname, '../../electron/preload.cjs'),
     },
   });
 

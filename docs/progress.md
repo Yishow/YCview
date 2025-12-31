@@ -75,7 +75,9 @@
 - [x] P1-W01-D03-IPC-IpcIndex-T02 建立 src/main/ipc/index.ts 與 channel 常數，能註冊 file/settings/system handler；驗收：單元測試/手動檢視 IPC handler 載入無錯。
   - ✅ 產物：src/main/ipc/index.ts + src/main/ipc/channels.ts（IPC_CHANNELS）
   - ✅ 驗收：npm run dev（主進程啟動時註冊 file/settings/system handlers，啟動過程無錯）；npm run lint 通過
-- [ ] P1-W01-D03-PRELOAD-PreloadApi-T03 建立 src/main/preload.ts 暴露安全 API（contextBridge）；驗收：renderer console 可讀取 window.api 且無 Node 污染警告。
+- [x] P1-W01-D03-PRELOAD-PreloadApi-T03 建立 src/main/preload.ts 暴露安全 API（contextBridge）；驗收：renderer console 可讀取 window.api 且無 Node 污染警告。
+  - ✅ 產物：src/main/preload.ts + electron/preload.cjs（載入 TS preload）
+  - ✅ 驗收：npm run dev 後開啟 DevTools（Ctrl+Shift+I）在 Console 輸入 window.api 可讀取；npm run lint 通過
 
 #### D05（渲染層起步）
 
