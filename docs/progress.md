@@ -84,7 +84,9 @@
 - [x] P1-W01-D05-UI-RendererBootstrap-T01 建立 src/renderer/main.tsx、App.tsx，渲染占位頁；驗收：npm run dev 顯示 React 佈局。
   - ✅ 產物：src/renderer/main.tsx、src/renderer/App.tsx、index.html（root + module script）、tsconfig.json（jsx）
   - ✅ 驗收：npm run dev（畫面顯示 WinCV Modern + 左右面板占位）；npm run lint（已通過）
-- [ ] P1-W01-D05-BUILD-TailwindSetup-T02 配置 Tailwind/tailwind.config.js 與 styles/globals.css 深淺色基礎；驗收：開發伺服器能載入樣式無錯。
+- [x] P1-W01-D05-BUILD-TailwindSetup-T02 配置 Tailwind/tailwind.config.js 與 styles/globals.css 深淺色基礎；驗收：開發伺服器能載入樣式無錯。
+  - ✅ 產物：tailwind.config.js、postcss.config.js、src/renderer/styles/globals.css（含深/淺色 CSS 變數基礎）、src/renderer/main.tsx（引入 globals.css）
+  - ✅ 驗收：npm run dev（Vite 可啟動且畫面樣式正常）；npm run lint（已通過）
 - [ ] P1-W01-D05-STORE-StateScaffold-T03 建立 stores/index.ts 與基本 store 空殼；驗收：tsc 無錯並可從組件匯入。
 
 ### W02 介面佈局

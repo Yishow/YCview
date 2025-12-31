@@ -1,19 +1,19 @@
 export default function App() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <header style={{ padding: 12, borderBottom: '1px solid #333' }}>
-        <div style={{ fontWeight: 700 }}>WinCV Modern</div>
-        <div style={{ opacity: 0.8, fontSize: 12 }}>Renderer bootstrap placeholder</div>
+    <div className="flex h-screen flex-col">
+      <header className="border-b border-[var(--color-border)] p-3">
+        <div className="font-bold">WinCV Modern</div>
+        <div className="text-xs opacity-80">Tailwind 已載入（placeholder）</div>
       </header>
 
-      <main style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', flex: 1 }}>
-        <section style={{ padding: 12, borderRight: '1px solid #333' }}>
+      <main className="grid flex-1 grid-cols-2">
+        <section className="border-r border-[var(--color-border)] p-3">
           Left Panel (placeholder)
         </section>
-        <section style={{ padding: 12 }}>Right Panel (placeholder)</section>
+        <section className="p-3">Right Panel (placeholder)</section>
       </main>
 
-      <footer style={{ padding: 8, borderTop: '1px solid #333', fontSize: 12 }}>
+      <footer className="border-t border-[var(--color-border)] p-2 text-xs">
         StatusBar (placeholder)
       </footer>
     </div>

@@ -28,7 +28,12 @@ module.exports = [
     },
   },
   {
-    files: ['electron/**/*.{cjs,js}', 'eslint.config.js'],
+    files: [
+      'electron/**/*.{cjs,js}',
+      'eslint.config.js',
+      'postcss.config.js',
+      'tailwind.config.js',
+    ],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'script',
