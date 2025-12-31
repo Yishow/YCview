@@ -98,7 +98,9 @@
 
 #### D01（佈局組件）
 
-- [ ] P1-W02-D01-UI-MainLayout-T01 建立 MainLayout/Slot 佈局含 Header/Toolbar/StatusBar 區位；驗收：Storybook 或頁面實例呈現框架。
+- [x] P1-W02-D01-UI-MainLayout-T01 建立 MainLayout/Slot 佈局含 Header/Toolbar/StatusBar 區位；驗收：Storybook 或頁面實例呈現框架。
+  - ✅ 產物：src/renderer/components/layout/MainLayout.tsx（header/toolbar/statusBar slots）、src/renderer/App.tsx（頁面實例套用）
+  - ✅ 驗收：pnpm run dev（可見 Header/Toolbar/內容區/StatusBar 框架）；pnpm run lint、pnpm exec tsc --noEmit（通過）
 - [ ] P1-W02-D01-UI-Header-T02 Header 顯示標題與目前路徑 placeholder，含視窗控制按鈕；驗收：UI 顯示與按鈕 hover 狀態。
 - [ ] P1-W02-D01-UI-Toolbar-T03 Toolbar 基本按鈕（Copy/Move/Delete/Rename/NewFolder/Refresh）含快捷鍵提示；驗收：按鈕 disabled/hover 狀態正確。
 
