@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { FileList, type FileListItem } from './FileList';
 import { PathBar } from './PathBar';
 
 /**
@@ -20,27 +22,39 @@ type FilePanelProps = {
 };
 
 /**
- * FileList Placeholder 組件
- *
- * 顯示檔案列表（虛擬滾動列表）
- */
-function FileList() {
-  return (
-    <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
-      <div className="text-4xl opacity-30">📂</div>
-      <div className="text-sm opacity-60">檔案列表 (placeholder)</div>
-      <div className="text-xs opacity-40">FileList 虛擬列表將在後續任務中實作</div>
-    </div>
-  );
-}
-
-/**
  * FilePanel 容器組件
  *
  * 整合路徑列與檔案列表，並提供焦點狀態的視覺回饋。
  * 焦點時會顯示強調邊框與微妙的背景色調變化。
  */
+function makeMockItems(seed: string, count: number): FileListItem[] {
+  const baseName = seed.split('\\').filter(Boolean).pop() ?? 'Root';
+  const pad2 = (n: number) => String(n).padStart(2, '0');
+
+  return Array.from({ length: count }, (_, i) => {
+    const isDirectory = i % 12 === 0;
+    const name = isDirectory ? `資料夾_${baseName}_${pad2(i)}` : `檔案_${baseName}_${pad2(i)}.txt`;
+    const sizeBytes = isDirectory ? 0 : (i * 1937) % (1024 * 1024 * 8);
+    const y = 2025;
+    const m = pad2(((i % 12) + 1) | 0);
+    const d = pad2(((i % 28) + 1) | 0);
+    const hh = pad2(i % 24);
+    const mm = pad2((i * 7) % 60);
+
+    return {
+      id: `${seed}::${i}`,
+      name,
+      type: isDirectory ? '<DIR>' : '文字檔',
+      sizeBytes,
+      modifiedAt: `${y}-${m}-${d} ${hh}:${mm}`,
+      isDirectory,
+    };
+  });
+}
+
 export function FilePanel({ isFocused = false, currentPath, onClick }: FilePanelProps) {
+  const items = useMemo(() => makeMockItems(currentPath ?? 'C:\\', 1000), [currentPath]);
+
   return (
     <div
       className={`
@@ -80,7 +94,7 @@ export function FilePanel({ isFocused = false, currentPath, onClick }: FilePanel
 
         {/* 檔案列表 */}
         <div className="flex-1 overflow-hidden">
-          <FileList />
+          <FileList items={items} />
         </div>
       </div>
     </div>

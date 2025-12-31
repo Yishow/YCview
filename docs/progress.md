@@ -119,7 +119,10 @@
   - ✅ 產物：src/renderer/components/layout/PathBar.tsx（可點擊麵包屑 + 磁碟下拉 placeholder）、更新 src/renderer/components/layout/FilePanel.tsx（改用 PathBar 元件）、更新 src/renderer/App.tsx（修正 Windows 路徑字串跳脫）
   - ✅ 驗收：pnpm run lint、pnpm exec tsc --noEmit、pnpm exec vite build（通過）
   - ✅ 手動驗收：pnpm run dev 後，點擊任一麵包屑（非最後一段）PathBar 顯示路徑會更新為該段對應路徑；切換磁碟下拉（C:/D:/E:）會更新顯示為對應磁碟根目錄。
-- [ ] P1-W02-D03-UI-FileList-T03 FileList 虛擬清單欄位（名稱/大小/日期/類型）與空態；驗收：mock 資料列表渲染 1000 筆不卡頓。
+- [x] P1-W02-D03-UI-FileList-T03 FileList 虛擬清單欄位（名稱/大小/日期/類型）與空態；驗收：mock 資料列表渲染 1000 筆不卡頓。
+  - ✅ 產物：src/renderer/components/layout/FileList.tsx（固定列高視窗化渲染 + 欄位 header + 空態）、更新 src/renderer/components/layout/FilePanel.tsx（接上 mock 1000 筆資料）
+  - ✅ 驗收：pnpm run lint、pnpm exec tsc --noEmit、pnpm exec vite build（通過）
+  - ✅ 手動驗收：pnpm run dev 後，在左右面板檔案列表中快速滾動（1000 筆）仍保持順暢；列表顯示欄位「名稱/大小/日期/類型」。
 - [ ] P1-W02-D03-UI-FileItem-T04 FileItem 顏色與選取/標記/焦點樣式；驗收：hover/selected/marked 狀態切換正確。
 
 #### D05（通用組件）
