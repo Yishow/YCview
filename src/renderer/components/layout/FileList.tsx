@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { FileItem, type FileInfo } from './FileItem';
 
 export type FileListItem = {
   id: string;
@@ -7,26 +8,31 @@ export type FileListItem = {
   sizeBytes: number;
   modifiedAt: string;
   isDirectory?: boolean;
+  extension?: string;
 };
 
 export type FileListProps = {
   items: FileListItem[];
+  selectedIds?: Set<string>;
+  markedIds?: Set<string>;
+  focusedId?: string | null;
+  onItemClick?: (id: string, e: React.MouseEvent) => void;
+  onItemDoubleClick?: (id: string) => void;
+  onItemContextMenu?: (id: string, e: React.MouseEvent) => void;
 };
 
 const ROW_HEIGHT = 28;
 const OVERSCAN = 8;
 
-function formatSize(bytes: number) {
-  if (bytes <= 0) return '-';
-  const kb = bytes / 1024;
-  if (kb < 1024) return `${kb.toFixed(0)} KB`;
-  const mb = kb / 1024;
-  if (mb < 1024) return `${mb.toFixed(1)} MB`;
-  const gb = mb / 1024;
-  return `${gb.toFixed(1)} GB`;
-}
-
-export function FileList({ items }: FileListProps) {
+export function FileList({
+  items,
+  selectedIds = new Set(),
+  markedIds = new Set(),
+  focusedId = null,
+  onItemClick,
+  onItemDoubleClick,
+  onItemContextMenu,
+}: FileListProps) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
 
@@ -100,26 +106,30 @@ export function FileList({ items }: FileListProps) {
           data-testid="file-list"
         >
           <div style={{ height: padTop }} aria-hidden="true" />
-          {visibleItems.map((it) => (
-            <div
-              key={it.id}
-              className="grid h-[28px] grid-cols-[1fr_120px_140px_120px] items-center gap-2 px-3 text-xs transition-colors hover:bg-[var(--color-border)]/30"
-              role="listitem"
-              data-testid="file-row"
-            >
-              <div className="min-w-0 truncate">
-                <span className={it.isDirectory ? 'opacity-90' : 'opacity-80'}>
-                  {it.isDirectory ? '📁' : '📄'}
-                </span>
-                <span className="ml-2">{it.name}</span>
-              </div>
-              <div className="text-right tabular-nums opacity-70">
-                {it.isDirectory ? '-' : formatSize(it.sizeBytes)}
-              </div>
-              <div className="tabular-nums opacity-70">{it.modifiedAt}</div>
-              <div className="opacity-70">{it.type}</div>
-            </div>
-          ))}
+          {visibleItems.map((it) => {
+            const fileInfo: FileInfo = {
+              id: it.id,
+              name: it.name,
+              sizeBytes: it.sizeBytes,
+              type: it.type,
+              modifiedAt: it.modifiedAt,
+              isDirectory: it.isDirectory,
+              extension: it.extension,
+            };
+
+            return (
+              <FileItem
+                key={it.id}
+                file={fileInfo}
+                isSelected={selectedIds.has(it.id)}
+                isMarked={markedIds.has(it.id)}
+                isFocused={focusedId === it.id}
+                onClick={(e) => onItemClick?.(it.id, e)}
+                onDoubleClick={() => onItemDoubleClick?.(it.id)}
+                onContextMenu={(e) => onItemContextMenu?.(it.id, e)}
+              />
+            );
+          })}
           <div style={{ height: padBottom }} aria-hidden="true" />
         </div>
       )}

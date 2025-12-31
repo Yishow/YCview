@@ -123,7 +123,17 @@
   - ✅ 產物：src/renderer/components/layout/FileList.tsx（固定列高視窗化渲染 + 欄位 header + 空態）、更新 src/renderer/components/layout/FilePanel.tsx（接上 mock 1000 筆資料）
   - ✅ 驗收：pnpm run lint、pnpm exec tsc --noEmit、pnpm exec vite build（通過）
   - ✅ 手動驗收：pnpm run dev 後，在左右面板檔案列表中快速滾動（1000 筆）仍保持順暢；列表顯示欄位「名稱/大小/日期/類型」。
-- [ ] P1-W02-D03-UI-FileItem-T04 FileItem 顏色與選取/標記/焦點樣式；驗收：hover/selected/marked 狀態切換正確。
+- [x] P1-W02-D03-UI-FileItem-T04 FileItem 顏色與選取/標記/焦點樣式；驗收：hover/selected/marked 狀態切換正確。
+  - ✅ 產物：src/renderer/components/layout/FileItem.tsx（FileItem 組件，支援 hover/selected/marked/focused 多種狀態）、更新 src/renderer/components/layout/FileList.tsx（整合 FileItem）、更新 src/renderer/components/layout/FilePanel.tsx（選取/標記狀態管理與鍵盤事件處理）、新增依賴 clsx（CSS 類別合併工具）
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm exec vite build（通過，206KB bundle）
+  - ✅ 手動驗收：
+    - Hover 狀態：滑鼠移至檔案項目時顯示淺灰背景（opacity 30%）
+    - Selected 狀態：點擊檔案項目後顯示 accent 色背景（opacity 20%），文字變粗體
+    - Marked 狀態：按 Insert 鍵後顯示黃色圓點指示器，且背景為淡黃色（opacity 10%）
+    - Focused 狀態：當前焦點項目顯示 accent 色內圈邊框（ring-1）
+    - 檔案類型顏色：資料夾（黃色）、執行檔（綠色）、壓縮檔（紅色）、圖片（紫色）、文件（藍色）、程式碼（青色）
+    - Ctrl+Click 可多選，普通 Click 單選
+    - Insert 鍵可切換標記狀態
 
 #### D05（通用組件）
 
