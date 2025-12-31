@@ -111,7 +111,10 @@
 
 #### D03（面板核心）
 
-- [ ] P1-W02-D03-UI-FilePanel-T01 FilePanel 聚合 PathBar + FileList，支援焦點樣式；驗收：手動切換左右面板時樣式正確。
+- [x] P1-W02-D03-UI-FilePanel-T01 FilePanel 聚合 PathBar + FileList，支援焦點樣式；驗收：手動切換左右面板時樣式正確。
+  - ✅ 產物：src/renderer/components/layout/FilePanel.tsx（FilePanel 容器組件 + PathBar/FileList placeholder）、更新 src/renderer/App.tsx（整合雙面板與焦點狀態管理）、更新 src/renderer/styles/globals.css（新增 --color-accent 變數）
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm exec vite build（通過，199KB bundle）
+  - ✅ 手動驗收：點擊左面板顯示藍色 ring 邊框與頂部 accent 細線；點擊右面板焦點平滑切換（300ms transition）；聚焦面板有微妙背景色調變化（accent/2% opacity）；PathBar 顯示路徑與資料夾圖示；FileList 顯示佔位訊息；支援鍵盤 Tab 焦點導航與 ARIA 標籤
 - [ ] P1-W02-D03-UI-PathBar-T02 PathBar 顯示麵包屑與磁碟下拉 placeholder；驗收：點擊麵包屑可變更顯示路徑。
 - [ ] P1-W02-D03-UI-FileList-T03 FileList 虛擬清單欄位（名稱/大小/日期/類型）與空態；驗收：mock 資料列表渲染 1000 筆不卡頓。
 - [ ] P1-W02-D03-UI-FileItem-T04 FileItem 顏色與選取/標記/焦點樣式；驗收：hover/selected/marked 狀態切換正確。

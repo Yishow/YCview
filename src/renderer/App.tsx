@@ -1,9 +1,13 @@
+import { useState } from 'react';
+import { FilePanel } from './components/layout/FilePanel';
 import { Header } from './components/layout/Header';
 import { MainLayout } from './components/layout/MainLayout';
 import { Toolbar } from './components/layout/Toolbar';
 import { STORE_SCAFFOLD_VERSION } from './stores';
 
 export default function App() {
+  const [focusedPanel, setFocusedPanel] = useState<'left' | 'right'>('left');
+
   return (
     <MainLayout
       header={<Header title="WinCV Modern" currentPath="C:\\ (placeholder)" />}
@@ -26,10 +30,16 @@ export default function App() {
       }
     >
       <div className="grid h-full grid-cols-2">
-        <section className="border-r border-[var(--color-border)] p-3">
-          Left Panel (placeholder)
-        </section>
-        <section className="p-3">Right Panel (placeholder)</section>
+        <FilePanel
+          isFocused={focusedPanel === 'left'}
+          currentPath="C:\Users\User\Documents"
+          onClick={() => setFocusedPanel('left')}
+        />
+        <FilePanel
+          isFocused={focusedPanel === 'right'}
+          currentPath="D:\Projects\WinCV"
+          onClick={() => setFocusedPanel('right')}
+        />
       </div>
     </MainLayout>
   );
