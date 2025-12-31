@@ -47,7 +47,11 @@
 
 ### W01 專案初始化
 #### D01（環境建置）
-- [ ] P1-W01-D01-REPO-RepoSetup-T01 初始化 Git 倉庫與 .gitignore、branch/PR/issue 模板；驗收：git status 乾淨且 .github 模板可見。
+- [x] P1-W01-D01-REPO-RepoSetup-T01 初始化 Git 倉庫與 .gitignore、branch/PR/issue 模板；驗收：git status 乾淨且 .github 模板可見。
+  - ✅ .gitignore 已存在並補充 Electron 專用規則
+  - ✅ .github/pull_request_template.md 已建立
+  - ✅ .github/ISSUE_TEMPLATE/bug_report.md 已建立
+  - ✅ .github/ISSUE_TEMPLATE/feature_request.md 已建立
 - [ ] P1-W01-D01-BOOT-ProjectInit-T02 npm init 並安裝 Electron/React/TypeScript/Vite 基礎依賴；驗收：npm run dev 能啟動空白視窗。
 - [ ] P1-W01-D01-CI-DevEnvironment-T03 配置 ESLint/Prettier/Husky/lint-staged；驗收：npm run lint 通過且 commit 時觸發格式化。
 

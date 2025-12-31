@@ -137,3 +137,51 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# ======================
+# Electron 專用規則
+# ======================
+
+# Electron Builder output (dist/out 已在上方定義)
+dist-*
+release/
+
+# Electron cache
+.electron/
+
+# Native addon build (build/Release 已在上方定義)
+# build/
+# !build/*.js
+# !build/*.ts
+
+# Playwright test results
+test-results/
+playwright-report/
+playwright/.cache/
+
+# macOS code signing
+*.p12
+*.provisionprofile
+*.keychain-db
+
+# Windows code signing
+*.pfx
+
+# Local environment files
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+tmp/
+temp/
