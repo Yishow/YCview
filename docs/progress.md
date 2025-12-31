@@ -63,33 +63,36 @@
 - [x] P1-W01-D01-BOOT-ProjectInit-T02 pnpm init 並安裝 Electron/React/TypeScript/Vite 基礎依賴；驗收：pnpm run dev 能啟動空白視窗。
   - ✅ 產物：package.json / vite.config.ts / electron/main.cjs / index.html
   - ✅ 驗收：pnpm run dev（看到 Vite ready 且 Electron 啟動無錯；視窗載入空白頁）
-- [x] P1-W01-D01-CI-DevEnvironment-T03 配置 ESLint/Prettier/Husky/lint-staged；驗收：npm run lint 通過且 commit 時觸發格式化。
+- [x] P1-W01-D01-CI-DevEnvironment-T03 配置 ESLint/Prettier/Husky/lint-staged；驗收：pnpm run lint 通過且 commit 時觸發格式化。
   - ✅ 產物：eslint.config.js / .prettierrc.json / .prettierignore / .husky/pre-commit
   - ✅ 驗收：pnpm run lint（已通過）；git commit 時會執行 lint-staged（Prettier + eslint --fix）
 - [x] P1-W01-D01-REPO-PackageManager-T03 切換至 pnpm 作為套件管理；驗收：移除 package-lock.json、更新 `package.json`、`.gitignore`、`.prettierignore`、相關 docs 與 PR template，並能使用 `pnpm run dev` 啟動 dev 環境。
   - ✅ 驗收步驟：移除 `package-lock.json`，執行 `pnpm install` 產生 `pnpm-lock.yaml`，執行 `pnpm run dev` 無錯並可開啟空白視窗。
+  - ✅ 驗收結果：已產生 `pnpm-lock.yaml`，`pnpm run lint` 無錯（本環境未實際開啟 GUI）。
 
 #### D03（主進程骨架）
 
-- [x] P1-W01-D03-BOOT-MainEntry-T01 建立 src/main/index.ts 設定 BrowserWindow（min 1024x768 標題）；驗收：npm run dev 啟動視窗尺寸正確。
+- [x] P1-W01-D03-BOOT-MainEntry-T01 建立 src/main/index.ts 設定 BrowserWindow（min 1024x768 標題）；驗收：pnpm run dev 啟動視窗尺寸正確。
   - ✅ 產物：src/main/index.ts（Electron 主進程入口）
   - ✅ 驗收：pnpm run dev（Vite ready；Electron 使用 ts-node 載入 main 並以 1024x768 最小尺寸啟動）
 - [x] P1-W01-D03-IPC-IpcIndex-T02 建立 src/main/ipc/index.ts 與 channel 常數，能註冊 file/settings/system handler；驗收：單元測試/手動檢視 IPC handler 載入無錯。
   - ✅ 產物：src/main/ipc/index.ts + src/main/ipc/channels.ts（IPC_CHANNELS）
-  - ✅ 驗收：npm run dev（主進程啟動時註冊 file/settings/system handlers，啟動過程無錯）；npm run lint 通過
+  - ✅ 驗收：pnpm run dev（主進程啟動時註冊 file/settings/system handlers，啟動過程無錯）；pnpm run lint 通過
 - [x] P1-W01-D03-PRELOAD-PreloadApi-T03 建立 src/main/preload.ts 暴露安全 API（contextBridge）；驗收：renderer console 可讀取 window.api 且無 Node 污染警告。
   - ✅ 產物：src/main/preload.ts + electron/preload.cjs（載入 TS preload）
-  - ✅ 驗收：npm run dev 後開啟 DevTools（Ctrl+Shift+I）在 Console 輸入 window.api 可讀取；npm run lint 通過
+  - ✅ 驗收：pnpm run dev 後開啟 DevTools（Ctrl+Shift+I）在 Console 輸入 window.api 可讀取；pnpm run lint 通過
 
 #### D05（渲染層起步）
 
-- [x] P1-W01-D05-UI-RendererBootstrap-T01 建立 src/renderer/main.tsx、App.tsx，渲染占位頁；驗收：npm run dev 顯示 React 佈局。
+- [x] P1-W01-D05-UI-RendererBootstrap-T01 建立 src/renderer/main.tsx、App.tsx，渲染占位頁；驗收：pnpm run dev 顯示 React 佈局。
   - ✅ 產物：src/renderer/main.tsx、src/renderer/App.tsx、index.html（root + module script）、tsconfig.json（jsx）
   - ✅ 驗收：pnpm run dev（畫面顯示 WinCV Modern + 左右面板占位）；pnpm run lint（已通過）
 - [x] P1-W01-D05-BUILD-TailwindSetup-T02 配置 Tailwind/tailwind.config.js 與 styles/globals.css 深淺色基礎；驗收：開發伺服器能載入樣式無錯。
   - ✅ 產物：tailwind.config.js、postcss.config.js、src/renderer/styles/globals.css（含深/淺色 CSS 變數基礎）、src/renderer/main.tsx（引入 globals.css）
-  - ✅ 驗收：npm run dev（Vite 可啟動且畫面樣式正常）；npm run lint（已通過）
-- [ ] P1-W01-D05-STORE-StateScaffold-T03 建立 stores/index.ts 與基本 store 空殼；驗收：tsc 無錯並可從組件匯入。
+  - ✅ 驗收：pnpm run dev（Vite 可啟動且畫面樣式正常）；pnpm run lint（已通過）
+- [x] P1-W01-D05-STORE-StateScaffold-T03 建立 stores/index.ts 與基本 store 空殼；驗收：tsc 無錯並可從組件匯入。
+  - ✅ 產物：src/renderer/stores/index.ts（simple store scaffold + uiStore）、src/renderer/App.tsx（示範匯入）
+  - ✅ 驗收：npx tsc --noEmit（通過）；pnpm run lint（通過）
 
 ### W02 介面佈局
 

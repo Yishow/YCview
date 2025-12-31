@@ -1168,10 +1168,10 @@ const shortcuts: ShortcutConfig[] = [
         □ Linux: png (512x512)
 
 □ 6.1.3 建置腳本
-    □ npm run build:win
-    □ npm run build:mac
-    □ npm run build:linux
-    □ npm run build:all
+    □ pnpm run build:win
+    □ pnpm run build:mac
+    □ pnpm run build:linux
+    □ pnpm run build:all
 ```
 
 **electron-builder.yml 設定**：
@@ -2783,7 +2783,7 @@ PATCH: 向下相容的問題修復
    □ 建立 release branch
 
 3. 建置
-   □ npm run build:all
+   □ pnpm run build:all
    □ 測試安裝檔
    □ 掃描惡意軟體
 
@@ -2824,16 +2824,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: npm test
+        run: pnpm test
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
