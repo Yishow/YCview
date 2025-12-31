@@ -32,12 +32,12 @@ export default function App() {
       <div className="grid h-full grid-cols-2">
         <FilePanel
           isFocused={focusedPanel === 'left'}
-          currentPath="C:\Users\User\Documents"
+          currentPath="C:\\Users\\User\\Documents"
           onClick={() => setFocusedPanel('left')}
         />
         <FilePanel
           isFocused={focusedPanel === 'right'}
-          currentPath="D:\Projects\WinCV"
+          currentPath="D:\\Projects\\WinCV"
           onClick={() => setFocusedPanel('right')}
         />
       </div>

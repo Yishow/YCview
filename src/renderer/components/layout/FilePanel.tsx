@@ -1,3 +1,5 @@
+import { PathBar } from './PathBar';
+
 /**
  * FilePanel 組件
  *
@@ -16,20 +18,6 @@ type FilePanelProps = {
   /** 點擊面板時的回調（用於切換焦點） */
   onClick?: () => void;
 };
-
-/**
- * PathBar Placeholder 組件
- *
- * 顯示當前路徑的麵包屑導航列
- */
-function PathBar({ currentPath = 'C:\\' }: { currentPath?: string }) {
-  return (
-    <div className="flex items-center gap-2 border-b border-[var(--color-border)] px-3 py-2 text-sm">
-      <span className="opacity-60">📁</span>
-      <span className="font-medium">{currentPath}</span>
-    </div>
-  );
-}
 
 /**
  * FileList Placeholder 組件
@@ -88,7 +76,7 @@ export function FilePanel({ isFocused = false, currentPath, onClick }: FilePanel
         `}
       >
         {/* 路徑列 */}
-        <PathBar currentPath={currentPath} />
+        <PathBar path={currentPath ?? 'C:\\'} />
 
         {/* 檔案列表 */}
         <div className="flex-1 overflow-hidden">
