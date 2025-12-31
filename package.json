@@ -3,15 +3,39 @@
   "version": "1.0.0",
   "description": "",
   "main": "electron/main.cjs",
-  "directories": {
-    "doc": "docs"
+  "build": {
+    "appId": "com.ycview.app",
+    "productName": "YCview",
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "resources/icon.ico"
+    }
   },
   "scripts": {
+    "// --- Development ---------------------------": "",
+    "predev": "kill-port 5173",
     "dev": "concurrently -k \"pnpm run dev:renderer\" \"pnpm run dev:electron\"",
     "dev:renderer": "vite",
     "dev:electron": "wait-on http://127.0.0.1:5173 && electron .",
+    "// --- Build & Release -----------------------": "",
+    "build": "pnpm run type-check && vite build && electron-builder",
+    "build:dir": "pnpm run type-check && vite build && electron-builder --dir",
+    "release": "standard-version",
+    "commit": "cz",
+    "// --- Quality Assurance ---------------------": "",
+    "type-check": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "// --- Utility -------------------------------": "",
+    "clean": "rimraf node_modules dist out release",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -34,27 +58,40 @@
     "url": "https://github.com/Yishow/YCview/issues"
   },
   "homepage": "https://github.com/Yishow/YCview#readme",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "dependencies": {
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@eslint/js": "^9.39.2",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
     "autoprefixer": "^10.4.23",
+    "commitizen": "^4.3.1",
     "concurrently": "^9.2.1",
+    "cz-conventional-changelog": "^3.3.0",
     "electron": "^39.2.7",
+    "electron-builder": "^26.0.12",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "husky": "^9.1.7",
+    "kill-port": "^2.0.1",
     "lint-staged": "^16.2.7",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
+    "rimraf": "^6.1.2",
+    "standard-version": "^9.5.0",
     "tailwindcss": "^4.1.18",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",

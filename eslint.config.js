@@ -33,6 +33,7 @@ module.exports = [
       'eslint.config.js',
       'postcss.config.js',
       'tailwind.config.js',
+      'commitlint.config.js',
     ],
     languageOptions: {
       ecmaVersion: 'latest',

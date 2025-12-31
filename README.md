@@ -2,42 +2,69 @@
 
 一個基於 Electron + React + TypeScript + Vite 的桌面應用範本（WinCV modern）。
 
-## 套件管理
+## 專案指令手冊 (Command Guide)
 
-本專案採用 pnpm 作為套件管理工具，請使用 pnpm 執行下列開發步驟。
+本專案統一使用 `pnpm` 進行管理，所有指令皆以 `pnpm <指令名>` 執行。以下為詳細分類說明：
 
-- 安裝依賴：
+### 🛠️ 開發環境 (Development)
 
-  pnpm install
+最常用的日常開發指令。
 
-- 開發（同時啟動 renderer 與 electron）：
+| 指令                    | 說明                            | 備註                                                                   |
+| :---------------------- | :------------------------------ | :--------------------------------------------------------------------- |
+| `pnpm dev`              | **[✨推薦]** 同時啟動前端與後端 | 一鍵啟動。會自動檢查並釋放 5173 埠，接著同時執行 Vite 與 Electron。    |
+| `pnpm run predev`       | 強制釋放開發埠口                | 自動執行 `kill-port 5173`。通常不需要手動執行，`pnpm dev` 會自動呼叫。 |
+| `pnpm run dev:renderer` | 僅啟動前端 (Vite)               | 於 `http://localhost:5173` 啟動。適合只想調試 UI/CSS 時使用。          |
+| `pnpm run dev:electron` | 僅啟動後端 (Electron)           | 需先確保前端服務已在 5173 埠運行，否則會持續等待。                     |
 
-  pnpm run dev
+### 📦 建置與發布 (Build & Release)
 
-- 程式碼檢查：
+用於產生可執行檔或發布新版本。
 
-  pnpm run lint
+| 指令                 | 說明                  | 備註                                                                      |
+| :------------------- | :-------------------- | :------------------------------------------------------------------------ |
+| `pnpm run build`     | 建置安裝檔            | 執行型別檢查 -> 建置前端 -> 打包成安裝檔 (如 .exe)。                      |
+| `pnpm run build:dir` | 建置免安裝目錄        | **[⚡快速測試]** 打包成資料夾而非安裝檔，建置速度較快，適合測試打包結果。 |
+| `pnpm run release`   | 發布新版本            | 自動升級版本號、產生 Changelog、建立 Git Tag。需配合 Git Push 觸發 CI。   |
+| `pnpm run commit`    | **[✨推薦]** 提交代碼 | 啟動互動式介面，協助撰寫符合 Conventional Commits 規範的訊息。            |
 
-- 測試：
+### 🔍 品質保證 (Quality Assurance)
 
-  pnpm test
+確保程式碼品質與風格一致。
 
-- 建置：
+| 指令                  | 說明                | 備註                                            |
+| :-------------------- | :------------------ | :---------------------------------------------- |
+| `pnpm run type-check` | TypeScript 型別檢查 | 檢查專案中是否有型別錯誤 (不會產出檔案)。       |
+| `pnpm run lint`       | ESLint 靜態分析     | 掃描並報告程式碼潛在問題。                      |
+| `pnpm run format`     | Prettier 格式化     | 自動排版所有支援的檔案 (ts, css, json, md...)。 |
 
-  pnpm run build
+### 🔧 工具與維護 (Utility)
 
----
+專案維護與環境設定。
 
-## CI 範例說明
+| 指令               | 說明                  | 備註                                                                      |
+| :----------------- | :-------------------- | :------------------------------------------------------------------------ |
+| `pnpm run clean`   | **[🧹清理]** 深度清潔 | 刪除 `node_modules`、`dist`、`release`。遇到依賴衝突或奇怪 bug 時的神器。 |
+| `pnpm run prepare` | 初始化 Git Hooks      | 安裝依賴時會自動執行，設定 Husky 攔截器。                                 |
 
-本專案包含一個 GitHub Actions 範例 workflow：`.github/workflows/ci.yml`，其要點如下：
+### 🚀 自動化發布 (Release)
 
-- 使用 Node.js (v20)
-- 使用 `pnpm/action-setup` 安裝 pnpm
-- 使用 pnpm cache（`.pnpm-store`）以加速 CI
-- 執行 `pnpm install --frozen-lockfile`、`pnpm run lint`、`pnpm test`、`pnpm run build`
+本專案已設定 GitHub Actions 自動發布流程：
 
-你可以根據專案需要調整 node 版本、pnpm 版本或要執行的步驟。
+1. 本機執行 `pnpm run release`，這會自動：
+   - 根據 Commit 訊息更新版本號 (major/minor/patch)
+   - 產生或更新 `CHANGELOG.md`
+   - 建立 git commit 和 git tag
+2. 將變更推送至遠端：`git push --follow-tags origin main`
+3. GitHub Actions 會偵測到新的 tag，自動觸發建置流程，打包 Windows/macOS 安裝檔並發布 Release。
+
+```bash
+# 完整發布流程範例
+git checkout main
+git pull
+pnpm run release
+git push --follow-tags origin main
+```
 
 ---
 
