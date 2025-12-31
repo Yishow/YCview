@@ -1,3 +1,5 @@
+import { STORE_SCAFFOLD_VERSION } from './stores';
+
 export default function App() {
   return (
     <div className="flex h-screen flex-col">
@@ -14,7 +16,7 @@ export default function App() {
       </main>
 
       <footer className="border-t border-[var(--color-border)] p-2 text-xs">
-        StatusBar (placeholder)
+        StatusBar (placeholder) · Store scaffold v{STORE_SCAFFOLD_VERSION}
       </footer>
     </div>
   );

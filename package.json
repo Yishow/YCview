@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "dev": "concurrently -k \"npm run dev:renderer\" \"npm run dev:electron\"",
+    "dev": "concurrently -k \"pnpm run dev:renderer\" \"pnpm run dev:electron\"",
     "dev:renderer": "vite",
     "dev:electron": "wait-on http://127.0.0.1:5173 && electron .",
     "lint": "eslint .",

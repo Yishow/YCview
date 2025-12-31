@@ -38,12 +38,12 @@
 
 ## 1.2 開發階段總覽
 
-| 階段 | 名稱 | 時程 | 目標 |
-|------|------|------|------|
-| Phase 1 | MVP 前期 | 4-6 週 | 可用的基本檔案管理器 |
-| Phase 2 | 核心完善 中期 | 6-8 週 | 功能完整的檔案管理器 |
-| Phase 3 | 進階功能 後期 | 8-10 週 | 專業級檔案管理器 |
-| Phase 4 | 優化擴展 長期 | 持續 | 生態系統建立 |
+| 階段    | 名稱          | 時程    | 目標                 |
+| ------- | ------------- | ------- | -------------------- |
+| Phase 1 | MVP 前期      | 4-6 週  | 可用的基本檔案管理器 |
+| Phase 2 | 核心完善 中期 | 6-8 週  | 功能完整的檔案管理器 |
+| Phase 3 | 進階功能 後期 | 8-10 週 | 專業級檔案管理器     |
+| Phase 4 | 優化擴展 長期 | 持續    | 生態系統建立         |
 
 ## 1.3 功能演進圖
 
@@ -275,7 +275,7 @@ MVP 完成標準：
     □ 建立 issue template
 
 □ 1.1.2 初始化專案
-    □ npm init
+    □ pnpm init
     □ 安裝 Electron
     □ 安裝 React + TypeScript
     □ 安裝 Vite
@@ -295,6 +295,7 @@ MVP 完成標準：
 ```
 
 **產出物**：
+
 - 可運行的空白 Electron + React 專案
 - 完整的開發環境設定
 
@@ -326,6 +327,7 @@ MVP 完成標準：
 ```
 
 **產出物**：
+
 - 完整的主進程架構
 - IPC 通訊機制
 - Preload 安全橋接
@@ -357,6 +359,7 @@ MVP 完成標準：
 ```
 
 **產出物**：
+
 - 完整的渲染進程架構
 - 狀態管理系統
 - 前後端通訊機制
@@ -409,6 +412,7 @@ MVP 完成標準：
 ```
 
 **組件規格 - MainLayout**：
+
 ```typescript
 // components/layout/MainLayout.tsx
 interface MainLayoutProps {
@@ -431,6 +435,7 @@ interface MainLayoutProps {
 ```
 
 **組件規格 - Toolbar**：
+
 ```typescript
 // components/layout/Toolbar.tsx
 interface ToolbarProps {
@@ -497,6 +502,7 @@ const toolbarButtons = [
 ```
 
 **組件規格 - FileItem**：
+
 ```typescript
 // components/panels/FileItem.tsx
 interface FileItemProps {
@@ -524,10 +530,10 @@ interface FileInfo {
 // 顏色規則
 const fileColors = {
   directory: 'text-yellow-400',
-  executable: 'text-green-400',    // .exe, .bat, .cmd, .sh
-  archive: 'text-red-400',         // .zip, .rar, .7z, .tar
-  image: 'text-purple-400',        // .jpg, .png, .gif
-  document: 'text-blue-400',       // .pdf, .doc, .txt
+  executable: 'text-green-400', // .exe, .bat, .cmd, .sh
+  archive: 'text-red-400', // .zip, .rar, .7z, .tar
+  image: 'text-purple-400', // .jpg, .png, .gif
+  document: 'text-blue-400', // .pdf, .doc, .txt
   default: 'text-gray-200',
 };
 ```
@@ -565,6 +571,7 @@ const fileColors = {
 ```
 
 **組件規格 - ContextMenu**：
+
 ```typescript
 // components/common/ContextMenu.tsx
 interface ContextMenuItem {
@@ -603,28 +610,28 @@ const fileContextMenu: ContextMenuItem[] = [
 任務清單：
 □ 3.1.1 FileService 類別
     □ 建立 src/main/services/file-service.ts
-    
+
     □ readDirectory(path: string)
         □ 讀取目錄內容
         □ 取得檔案資訊 (大小、日期、屬性)
         □ 過濾隱藏檔案 (可選)
         □ 排序處理
         □ 錯誤處理 (權限不足等)
-    
+
     □ getFileInfo(path: string)
         □ 取得單一檔案詳細資訊
         □ 檔案類型判斷
         □ MIME type 偵測
-    
+
     □ getDrives()
         □ 取得系統磁碟機列表
         □ 磁碟機標籤
         □ 可用空間
         □ 總空間
-    
+
     □ exists(path: string)
         □ 檢查路徑是否存在
-        
+
     □ isDirectory(path: string)
         □ 檢查是否為目錄
 
@@ -637,6 +644,7 @@ const fileContextMenu: ContextMenuItem[] = [
 ```
 
 **FileService 規格**：
+
 ```typescript
 // src/main/services/file-service.ts
 interface FileService {
@@ -654,8 +662,8 @@ interface ReadDirectoryOptions {
 }
 
 interface DriveInfo {
-  name: string;        // 'C:', 'D:'
-  label: string;       // '本機磁碟', 'DATA'
+  name: string; // 'C:', 'D:'
+  label: string; // '本機磁碟', 'DATA'
   type: 'fixed' | 'removable' | 'network' | 'cdrom';
   totalSpace: number;
   freeSpace: number;
@@ -708,12 +716,13 @@ interface DriveInfo {
 ```
 
 **複製功能規格**：
+
 ```typescript
 // src/main/services/file-service.ts
 interface CopyOptions {
   overwrite?: boolean;
   skipExisting?: boolean;
-  rename?: boolean;  // 自動重新命名 (file_1.txt)
+  rename?: boolean; // 自動重新命名 (file_1.txt)
 }
 
 interface CopyProgress {
@@ -722,8 +731,8 @@ interface CopyProgress {
   currentFile: string;
   totalBytes: number;
   copiedBytes: number;
-  speed: number;  // bytes per second
-  eta: number;    // seconds remaining
+  speed: number; // bytes per second
+  eta: number; // seconds remaining
 }
 
 // 進度回報透過 IPC
@@ -785,7 +794,7 @@ ipcMain.on('file:copy-progress', (event, progress: CopyProgress) => {
         □ markedItems: Set<string>
         □ focusedItem: string | null
         □ lastSelectedItem: string | null
-    
+
     □ Actions
         □ select(path: string)
         □ deselect(path: string)
@@ -821,21 +830,22 @@ ipcMain.on('file:copy-progress', (event, progress: CopyProgress) => {
 ```
 
 **Selection Store 規格**：
+
 ```typescript
 // stores/selection-store.ts
 interface SelectionState {
   // 選取狀態 (滑鼠點選，藍色高亮)
   selectedItems: Set<string>;
-  
+
   // 標記狀態 (空白鍵標記，用於批次操作)
   markedItems: Set<string>;
-  
+
   // 焦點項目 (鍵盤導航)
   focusedItem: string | null;
-  
+
   // 上次選取項目 (用於 Shift 範圍選取)
   lastSelectedItem: string | null;
-  
+
   // 統計
   markedCount: number;
   markedSize: number;
@@ -849,7 +859,7 @@ interface SelectionActions {
   selectRange: (from: string, to: string, items: string[]) => void;
   selectAll: (items: string[]) => void;
   deselectAll: () => void;
-  
+
   // 標記操作 (WinCV 特色)
   mark: (path: string) => void;
   unmark: (path: string) => void;
@@ -857,7 +867,7 @@ interface SelectionActions {
   markAll: (items: string[]) => void;
   unmarkAll: () => void;
   invertMarks: (items: string[]) => void;
-  
+
   // 焦點操作
   setFocus: (path: string) => void;
   moveFocus: (direction: 'up' | 'down', items: string[]) => void;
@@ -876,7 +886,7 @@ interface SelectionActions {
     □ 快捷鍵衝突處理
 
 □ 4.2.2 MVP 快捷鍵清單
-    
+
     檔案操作：
     □ C - 複製
     □ M - 移動
@@ -886,20 +896,20 @@ interface SelectionActions {
     □ Backspace - 返回上層
     □ F3 - 新增資料夾
     □ F5 - 重新整理
-    
+
     標記操作：
     □ Space - 標記/取消標記
     □ T - 標記全部
     □ U - 取消全部標記
     □ * - 反轉標記
-    
+
     導航：
     □ ↑↓ - 上下移動
     □ Home - 移至頂部
     □ End - 移至底部
     □ PageUp/PageDown - 翻頁
     □ Tab - 切換面板
-    
+
     選取：
     □ Ctrl+A - 全選
     □ Ctrl+↑↓ - 移動焦點不選取
@@ -912,6 +922,7 @@ interface SelectionActions {
 ```
 
 **快捷鍵系統規格**：
+
 ```typescript
 // hooks/useKeyboardShortcuts.ts
 interface ShortcutConfig {
@@ -920,7 +931,7 @@ interface ShortcutConfig {
   shift?: boolean;
   alt?: boolean;
   action: () => void;
-  when?: () => boolean;  // 條件式觸發
+  when?: () => boolean; // 條件式觸發
   preventDefault?: boolean;
 }
 
@@ -934,20 +945,20 @@ const shortcuts: ShortcutConfig[] = [
   { key: 'Backspace', action: handleGoUp },
   { key: 'F3', action: handleNewFolder },
   { key: 'F5', action: handleRefresh },
-  
+
   // 標記操作
   { key: ' ', action: handleToggleMark, when: hasFocus },
   { key: 't', action: handleMarkAll },
   { key: 'u', action: handleUnmarkAll },
   { key: '*', action: handleInvertMarks },
-  
+
   // 導航
   { key: 'ArrowUp', action: () => moveFocus('up') },
   { key: 'ArrowDown', action: () => moveFocus('down') },
   { key: 'Home', action: handleGoToTop },
   { key: 'End', action: handleGoToBottom },
   { key: 'Tab', action: handleSwitchPanel },
-  
+
   // 選取
   { key: 'a', ctrl: true, action: handleSelectAll },
 ];
@@ -1024,34 +1035,35 @@ const shortcuts: ShortcutConfig[] = [
 ```
 
 **主題 CSS 變數規格**：
+
 ```css
 /* styles/themes/dark.css */
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   /* 背景色 */
   --color-bg-primary: #0a0a0a;
   --color-bg-secondary: #141414;
   --color-bg-tertiary: #1f1f1f;
   --color-bg-hover: #2a2a2a;
   --color-bg-selected: #1e3a5f;
-  
+
   /* 文字色 */
   --color-text-primary: #e5e5e5;
   --color-text-secondary: #a3a3a3;
   --color-text-muted: #737373;
-  
+
   /* 邊框 */
   --color-border: #333333;
   --color-border-focus: #3b82f6;
-  
+
   /* 強調色 */
   --color-accent: #3b82f6;
   --color-accent-hover: #2563eb;
-  
+
   /* 狀態色 */
   --color-danger: #ef4444;
   --color-success: #22c55e;
   --color-warning: #f59e0b;
-  
+
   /* 檔案類型色 */
   --color-file-directory: #facc15;
   --color-file-executable: #22c55e;
@@ -1163,6 +1175,7 @@ const shortcuts: ShortcutConfig[] = [
 ```
 
 **electron-builder.yml 設定**：
+
 ```yaml
 # electron-builder.yml
 appId: com.wincv.modern
@@ -1174,8 +1187,8 @@ directories:
   buildResources: resources
 
 files:
-  - "!**/.git"
-  - "!**/node_modules/*/{CHANGELOG.md,README.md}"
+  - '!**/.git'
+  - '!**/node_modules/*/{CHANGELOG.md,README.md}'
 
 win:
   target:
@@ -1347,7 +1360,7 @@ Phase 2 完成標準：
         □ switchTab()
         □ moveTab()
         □ duplicateTab()
-    
+
     □ Tab 資料結構
         □ id: string
         □ path: string
@@ -1361,7 +1374,7 @@ Phase 2 完成標準：
         □ Tab 標籤列表
         □ 新增分頁按鈕
         □ Tab overflow 處理 (箭頭/下拉)
-    
+
     □ Tab 組件
         □ 圖示
         □ 標題 (可編輯)
@@ -1396,7 +1409,7 @@ Phase 2 完成標準：
         □ removeBookmark()
         □ updateBookmark()
         □ reorderBookmark()
-    
+
     □ Bookmark 資料結構
         □ id: string
         □ name: string
@@ -1404,7 +1417,7 @@ Phase 2 完成標準：
         □ icon: string
         □ color: string
         □ createdAt: Date
-    
+
     □ BookmarkBar 組件
         □ 書籤列表
         □ 點擊跳轉
@@ -1414,7 +1427,7 @@ Phase 2 完成標準：
             □ 在新分頁開啟
         □ 拖曳排序
         □ 拖曳新增 (從檔案列表)
-    
+
     □ AddBookmarkDialog 組件
         □ 名稱輸入
         □ 路徑顯示
@@ -1432,7 +1445,7 @@ Phase 2 完成標準：
             □ 正則表達式
         □ 即時預覽
         □ 套用/取消
-    
+
     □ 改名引擎
         □ 解析改名規則
         □ 產生新檔名
@@ -1441,6 +1454,7 @@ Phase 2 完成標準：
 ```
 
 **批次改名規格**：
+
 ```typescript
 interface RenameRule {
   type: 'findReplace' | 'prefix' | 'suffix' | 'sequence' | 'case' | 'regex';
@@ -1485,12 +1499,12 @@ interface RenamePreview {
             □ 壓縮等級
             □ 密碼保護 (zip)
             □ 進度回報
-        
+
         □ extract(archive: string, destination: string, options)
             □ 自動偵測格式
             □ 密碼輸入
             □ 進度回報
-        
+
         □ list(archive: string)
             □ 列出壓縮檔內容
             □ 不解壓縮
@@ -1501,12 +1515,12 @@ interface RenamePreview {
         □ 壓縮等級
         □ 輸出路徑
         □ 密碼設定
-    
+
     □ ExtractDialog 組件
         □ 目標路徑
         □ 密碼輸入
         □ 進度顯示
-    
+
     □ ArchivePreview 組件
         □ 壓縮檔內容預覽
         □ 選擇性解壓縮
@@ -1529,16 +1543,16 @@ interface RenamePreview {
             □ 文字：txt, md, json, xml, csv
             □ 程式碼：js, ts, py, html, css
         □ 程式碼語法高亮
-    
+
     □ ImagePreview 組件
         □ 縮放功能
         □ 圖片資訊 (尺寸、大小)
-    
+
     □ TextPreview 組件
         □ 語法高亮 (Prism/Shiki)
         □ 行號顯示
         □ 搜尋功能
-    
+
     □ 快捷鍵
         □ Alt+P - 切換預覽面板
 
@@ -1548,7 +1562,7 @@ interface RenamePreview {
         □ calculateSHA1(file: string)
         □ calculateSHA256(file: string)
         □ 進度回報 (大檔案)
-    
+
     □ HashDialog 組件
         □ 選擇雜湊類型
         □ 計算進度
@@ -1596,7 +1610,7 @@ Phase 3 完成標準：
         □ uploadFile(localPath: string, remotePath: string)
         □ deleteFile(remotePath: string)
         □ createFolder(path: string)
-    
+
     □ 支援的雲端服務
         □ Google Drive
             □ OAuth2 認證
@@ -1611,7 +1625,7 @@ Phase 3 完成標準：
         □ 新增帳號
         □ 管理已連結帳號
         □ 移除帳號
-    
+
     □ 雲端面板整合
         □ 雲端磁碟顯示在磁碟列表
         □ 統一的檔案操作體驗
@@ -1637,7 +1651,7 @@ Phase 3 完成標準：
             □ 雙向同步
             □ 單向同步 (A→B / B→A)
             □ 鏡像
-    
+
     □ SyncDialog 組件
         □ 來源/目標選擇
         □ 同步策略選擇
@@ -1655,7 +1669,7 @@ Phase 3 完成標準：
             □ 大小範圍
             □ 日期範圍
             □ 副檔名
-    
+
     □ AdvancedSearchDialog 組件
         □ 搜尋條件設定
         □ 搜尋結果列表
@@ -1684,7 +1698,7 @@ Phase 3 完成標準：
             □ added
             □ deleted
             □ untracked
-    
+
     □ Git 狀態顯示
         □ 檔案列表 Git 圖示
         □ 顏色標示
@@ -1700,7 +1714,7 @@ Phase 3 完成標準：
         □ 顏色自訂
         □ 即時預覽
         □ 匯出/匯入
-    
+
     □ 預設主題擴充
         □ Monokai
         □ Solarized Dark/Light
@@ -1711,13 +1725,13 @@ Phase 3 完成標準：
     □ i18n 架構
         □ 使用 react-i18next
         □ 語系檔案結構
-    
+
     □ 支援語系
         □ 繁體中文 (zh-TW)
         □ 簡體中文 (zh-CN)
         □ 英文 (en)
         □ 日文 (ja)
-    
+
     □ 語系切換 UI
 ```
 
@@ -1748,12 +1762,12 @@ Phase 4 持續目標：
         □ UI 擴展點
         □ 檔案操作擴展
         □ 右鍵選單擴展
-    
+
     □ Plugin Manifest
         □ 名稱、版本、作者
         □ 權限需求
         □ 入口點
-    
+
     □ 外掛管理器
         □ 安裝外掛
         □ 啟用/停用
@@ -1789,11 +1803,11 @@ Phase 4 持續目標：
 □ 集中管理
     □ 組態派送
     □ 授權管理
-    
+
 □ 安全功能
     □ 稽核日誌
     □ 權限控制
-    
+
 □ 整合功能
     □ Active Directory
     □ LDAP
@@ -1825,10 +1839,10 @@ interface FileInfo {
 
 // 磁碟資訊
 interface DriveInfo {
-  name: string;           // 'C:', '/home'
-  label: string;          // 'Windows', 'Data'
+  name: string; // 'C:', '/home'
+  label: string; // 'Windows', 'Data'
   type: DriveType;
-  fileSystem: string;     // 'NTFS', 'ext4'
+  fileSystem: string; // 'NTFS', 'ext4'
   totalSpace: number;
   freeSpace: number;
   usedSpace: number;
@@ -1885,7 +1899,7 @@ interface Settings {
   theme: 'dark' | 'light' | 'system';
   language: string;
   fontSize: 'small' | 'medium' | 'large';
-  
+
   // 檔案列表
   showHiddenFiles: boolean;
   showFileExtensions: boolean;
@@ -1896,7 +1910,7 @@ interface Settings {
   sortBy: 'name' | 'size' | 'date' | 'extension';
   sortOrder: 'asc' | 'desc';
   foldersFirst: boolean;
-  
+
   // 行為
   confirmDelete: boolean;
   useTrashBin: boolean;
@@ -1904,12 +1918,12 @@ interface Settings {
   autoRefresh: boolean;
   rememberTabs: boolean;
   rememberPanelSize: boolean;
-  
+
   // 預覽
   enablePreview: boolean;
   previewPanelSize: number;
-  maxPreviewSize: number;  // bytes
-  
+  maxPreviewSize: number; // bytes
+
   // 快捷鍵
   shortcuts: Record<string, string>;
 }
@@ -1927,7 +1941,7 @@ interface FileStore {
     isLoading: boolean;
     error: string | null;
   };
-  
+
   // 右面板
   rightPanel: {
     path: string;
@@ -1935,10 +1949,10 @@ interface FileStore {
     isLoading: boolean;
     error: string | null;
   };
-  
+
   // 當前活動面板
   activePanel: 'left' | 'right';
-  
+
   // Actions
   setPath: (panel: 'left' | 'right', path: string) => Promise<void>;
   refresh: (panel?: 'left' | 'right') => Promise<void>;
@@ -1952,31 +1966,31 @@ interface SelectionStore {
     left: Set<string>;
     right: Set<string>;
   };
-  
+
   // 標記狀態
   markedItems: {
     left: Set<string>;
     right: Set<string>;
   };
-  
+
   // 焦點
   focusedItem: {
     left: string | null;
     right: string | null;
   };
-  
+
   // Actions
   select: (panel: 'left' | 'right', path: string) => void;
   toggleSelect: (panel: 'left' | 'right', path: string) => void;
   selectRange: (panel: 'left' | 'right', from: string, to: string) => void;
   selectAll: (panel: 'left' | 'right') => void;
   clearSelection: (panel: 'left' | 'right') => void;
-  
+
   toggleMark: (panel: 'left' | 'right', path: string) => void;
   markAll: (panel: 'left' | 'right') => void;
   unmarkAll: (panel: 'left' | 'right') => void;
   invertMarks: (panel: 'left' | 'right') => void;
-  
+
   setFocus: (panel: 'left' | 'right', path: string) => void;
 }
 
@@ -1986,12 +2000,12 @@ interface TabStore {
     left: Tab[];
     right: Tab[];
   };
-  
+
   activeTabIndex: {
     left: number;
     right: number;
   };
-  
+
   // Actions
   addTab: (panel: 'left' | 'right', path?: string) => void;
   removeTab: (panel: 'left' | 'right', index: number) => void;
@@ -2013,17 +2027,17 @@ interface UIStore {
     compress: boolean;
     extract: boolean;
   };
-  
+
   // 面板狀態
-  panelRatio: number;  // 0-1, 左面板比例
+  panelRatio: number; // 0-1, 左面板比例
   showPreview: boolean;
   previewSize: number;
   showBookmarks: boolean;
   showTerminal: boolean;
-  
+
   // 當前操作
   currentOperation: OperationProgress | null;
-  
+
   // Actions
   openDialog: (dialog: keyof UIStore['dialogs']) => void;
   closeDialog: (dialog: keyof UIStore['dialogs']) => void;
@@ -2034,7 +2048,7 @@ interface UIStore {
 // Settings Store
 interface SettingsStore {
   settings: Settings;
-  
+
   // Actions
   updateSettings: (partial: Partial<Settings>) => void;
   resetSettings: () => void;
@@ -2065,34 +2079,34 @@ const IPC_CHANNELS = {
   FILE_OPEN: 'file:open',
   FILE_OPEN_WITH: 'file:open-with',
   FILE_SHOW_IN_EXPLORER: 'file:show-in-explorer',
-  
+
   // 進度事件
   PROGRESS_UPDATE: 'progress:update',
   PROGRESS_COMPLETE: 'progress:complete',
   PROGRESS_ERROR: 'progress:error',
   PROGRESS_CANCEL: 'progress:cancel',
-  
+
   // 檔案監視
   WATCH_START: 'watch:start',
   WATCH_STOP: 'watch:stop',
   WATCH_EVENT: 'watch:event',
-  
+
   // 壓縮
   ARCHIVE_COMPRESS: 'archive:compress',
   ARCHIVE_EXTRACT: 'archive:extract',
   ARCHIVE_LIST: 'archive:list',
-  
+
   // 雜湊
   HASH_CALCULATE: 'hash:calculate',
-  
+
   // 設定
   SETTINGS_GET: 'settings:get',
   SETTINGS_SET: 'settings:set',
-  
+
   // 系統
   SYSTEM_GET_INFO: 'system:get-info',
   SYSTEM_GET_PLATFORM: 'system:get-platform',
-  
+
   // 視窗
   WINDOW_MINIMIZE: 'window:minimize',
   WINDOW_MAXIMIZE: 'window:maximize',
@@ -2166,7 +2180,7 @@ interface CompressRequest {
   outputPath: string;
   format: 'zip' | '7z' | 'tar.gz';
   options?: {
-    level?: number;  // 1-9
+    level?: number; // 1-9
     password?: string;
   };
 }
@@ -2205,95 +2219,86 @@ const api = {
   file: {
     readDirectory: (path: string, options?: ReadDirectoryOptions) =>
       ipcRenderer.invoke('file:read-directory', { path, options }),
-    
-    getInfo: (path: string) =>
-      ipcRenderer.invoke('file:get-info', { path }),
-    
-    getDrives: () =>
-      ipcRenderer.invoke('file:get-drives'),
-    
+
+    getInfo: (path: string) => ipcRenderer.invoke('file:get-info', { path }),
+
+    getDrives: () => ipcRenderer.invoke('file:get-drives'),
+
     copy: (sources: string[], destination: string, options?: CopyOptions) =>
       ipcRenderer.invoke('file:copy', { sources, destination, options }),
-    
+
     move: (sources: string[], destination: string, options?: MoveOptions) =>
       ipcRenderer.invoke('file:move', { sources, destination, options }),
-    
+
     delete: (paths: string[], options?: DeleteOptions) =>
       ipcRenderer.invoke('file:delete', { paths, options }),
-    
+
     rename: (oldPath: string, newName: string) =>
       ipcRenderer.invoke('file:rename', { oldPath, newName }),
-    
+
     createDirectory: (parentPath: string, name: string) =>
       ipcRenderer.invoke('file:create-directory', { parentPath, name }),
-    
-    exists: (path: string) =>
-      ipcRenderer.invoke('file:exists', { path }),
-    
-    open: (path: string) =>
-      ipcRenderer.invoke('file:open', { path }),
-    
-    showInExplorer: (path: string) =>
-      ipcRenderer.invoke('file:show-in-explorer', { path }),
+
+    exists: (path: string) => ipcRenderer.invoke('file:exists', { path }),
+
+    open: (path: string) => ipcRenderer.invoke('file:open', { path }),
+
+    showInExplorer: (path: string) => ipcRenderer.invoke('file:show-in-explorer', { path }),
   },
-  
+
   // 進度事件
   progress: {
     onUpdate: (callback: (progress: OperationProgress) => void) =>
       ipcRenderer.on('progress:update', (_, progress) => callback(progress)),
-    
+
     onComplete: (callback: (result: any) => void) =>
       ipcRenderer.on('progress:complete', (_, result) => callback(result)),
-    
+
     onError: (callback: (error: any) => void) =>
       ipcRenderer.on('progress:error', (_, error) => callback(error)),
-    
-    cancel: (operationId: string) =>
-      ipcRenderer.invoke('progress:cancel', { operationId }),
-    
+
+    cancel: (operationId: string) => ipcRenderer.invoke('progress:cancel', { operationId }),
+
     removeListeners: () => {
       ipcRenderer.removeAllListeners('progress:update');
       ipcRenderer.removeAllListeners('progress:complete');
       ipcRenderer.removeAllListeners('progress:error');
     },
   },
-  
+
   // 檔案監視
   watch: {
-    start: (path: string) =>
-      ipcRenderer.invoke('watch:start', { path }),
-    
-    stop: (path: string) =>
-      ipcRenderer.invoke('watch:stop', { path }),
-    
+    start: (path: string) => ipcRenderer.invoke('watch:start', { path }),
+
+    stop: (path: string) => ipcRenderer.invoke('watch:stop', { path }),
+
     onEvent: (callback: (event: WatchEvent) => void) =>
       ipcRenderer.on('watch:event', (_, event) => callback(event)),
   },
-  
+
   // 壓縮
   archive: {
     compress: (files: string[], outputPath: string, options?: CompressOptions) =>
       ipcRenderer.invoke('archive:compress', { files, outputPath, options }),
-    
+
     extract: (archivePath: string, destination: string, options?: ExtractOptions) =>
       ipcRenderer.invoke('archive:extract', { archivePath, destination, options }),
-    
-    list: (archivePath: string) =>
-      ipcRenderer.invoke('archive:list', { archivePath }),
+
+    list: (archivePath: string) => ipcRenderer.invoke('archive:list', { archivePath }),
   },
-  
+
   // 雜湊
   hash: {
     calculate: (filePath: string, algorithm: HashAlgorithm) =>
       ipcRenderer.invoke('hash:calculate', { filePath, algorithm }),
   },
-  
+
   // 設定
   settings: {
     get: () => ipcRenderer.invoke('settings:get'),
     set: (settings: Partial<Settings>) => ipcRenderer.invoke('settings:set', { settings }),
   },
-  
+
   // 視窗控制
   window: {
     minimize: () => ipcRenderer.invoke('window:minimize'),
@@ -2344,38 +2349,38 @@ declare global {
 
 ```css
 /* 深色主題 */
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   /* 基礎色 */
   --color-bg-base: #0a0a0a;
   --color-bg-elevated: #141414;
   --color-bg-overlay: #1f1f1f;
-  
+
   /* 互動色 */
   --color-bg-hover: rgba(255, 255, 255, 0.05);
   --color-bg-active: rgba(255, 255, 255, 0.1);
   --color-bg-selected: rgba(59, 130, 246, 0.3);
   --color-bg-marked: rgba(250, 204, 21, 0.2);
-  
+
   /* 文字色 */
   --color-text-primary: #f5f5f5;
   --color-text-secondary: #a3a3a3;
   --color-text-muted: #737373;
   --color-text-disabled: #525252;
-  
+
   /* 邊框色 */
   --color-border-default: #2e2e2e;
   --color-border-focus: #3b82f6;
-  
+
   /* 強調色 */
   --color-accent-primary: #3b82f6;
   --color-accent-secondary: #8b5cf6;
-  
+
   /* 語意色 */
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
   --color-info: #06b6d4;
-  
+
   /* 檔案類型色 */
   --color-file-folder: #facc15;
   --color-file-executable: #22c55e;
@@ -2389,24 +2394,24 @@ declare global {
 }
 
 /* 淺色主題 */
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --color-bg-base: #ffffff;
   --color-bg-elevated: #f5f5f5;
   --color-bg-overlay: #e5e5e5;
-  
+
   --color-bg-hover: rgba(0, 0, 0, 0.05);
   --color-bg-active: rgba(0, 0, 0, 0.1);
   --color-bg-selected: rgba(59, 130, 246, 0.2);
   --color-bg-marked: rgba(250, 204, 21, 0.3);
-  
+
   --color-text-primary: #171717;
   --color-text-secondary: #525252;
   --color-text-muted: #737373;
   --color-text-disabled: #a3a3a3;
-  
+
   --color-border-default: #e5e5e5;
   --color-border-focus: #3b82f6;
-  
+
   /* 檔案類型色 (淺色主題調整) */
   --color-file-folder: #ca8a04;
   --color-file-executable: #16a34a;
@@ -2431,25 +2436,25 @@ declare global {
   --spacing-lg: 16px;
   --spacing-xl: 24px;
   --spacing-2xl: 32px;
-  
+
   /* 圓角 */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
   --radius-full: 9999px;
-  
+
   /* 字體大小 */
   --font-xs: 11px;
   --font-sm: 12px;
   --font-md: 13px;
   --font-lg: 14px;
   --font-xl: 16px;
-  
+
   /* 行高 */
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
-  
+
   /* 固定尺寸 */
   --header-height: 40px;
   --toolbar-height: 36px;
@@ -2522,7 +2527,7 @@ declare global {
   --duration-fast: 100ms;
   --duration-normal: 200ms;
   --duration-slow: 300ms;
-  
+
   /* 緩動函數 */
   --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
@@ -2532,9 +2537,10 @@ declare global {
 
 /* 常用動畫 */
 .transition-colors {
-  transition: background-color var(--duration-fast) var(--ease-default),
-              border-color var(--duration-fast) var(--ease-default),
-              color var(--duration-fast) var(--ease-default);
+  transition:
+    background-color var(--duration-fast) var(--ease-default),
+    border-color var(--duration-fast) var(--ease-default),
+    color var(--duration-fast) var(--ease-default);
 }
 
 .transition-transform {
@@ -2571,21 +2577,21 @@ describe('formatFileSize', () => {
     expect(formatFileSize(0)).toBe('0 B');
     expect(formatFileSize(500)).toBe('500 B');
   });
-  
+
   test('should format kilobytes', () => {
     expect(formatFileSize(1024)).toBe('1.00 KB');
     expect(formatFileSize(1536)).toBe('1.50 KB');
   });
-  
+
   test('should format megabytes', () => {
     expect(formatFileSize(1048576)).toBe('1.00 MB');
     expect(formatFileSize(1572864)).toBe('1.50 MB');
   });
-  
+
   test('should format gigabytes', () => {
     expect(formatFileSize(1073741824)).toBe('1.00 GB');
   });
-  
+
   test('should format terabytes', () => {
     expect(formatFileSize(1099511627776)).toBe('1.00 TB');
   });
@@ -2596,13 +2602,13 @@ describe('SelectionStore', () => {
   beforeEach(() => {
     useSelectionStore.getState().clearSelection('left');
   });
-  
+
   test('should select single item', () => {
     const { select, selectedItems } = useSelectionStore.getState();
     select('left', '/path/to/file.txt');
     expect(selectedItems.left.has('/path/to/file.txt')).toBe(true);
   });
-  
+
   test('should toggle selection', () => {
     const { toggleSelect, selectedItems } = useSelectionStore.getState();
     toggleSelect('left', '/path/to/file.txt');
@@ -2610,13 +2616,13 @@ describe('SelectionStore', () => {
     toggleSelect('left', '/path/to/file.txt');
     expect(selectedItems.left.has('/path/to/file.txt')).toBe(false);
   });
-  
+
   test('should mark and unmark', () => {
     const { toggleMark, markedItems } = useSelectionStore.getState();
     toggleMark('left', '/path/to/file.txt');
     expect(markedItems.left.has('/path/to/file.txt')).toBe(true);
   });
-  
+
   test('should invert marks', () => {
     const items = ['/a.txt', '/b.txt', '/c.txt'];
     const { toggleMark, invertMarks, markedItems } = useSelectionStore.getState();
@@ -2637,17 +2643,13 @@ describe('FileService', () => {
     expect(files[0]).toHaveProperty('path');
     expect(files[0]).toHaveProperty('size');
   });
-  
+
   test('should handle non-existent directory', async () => {
-    await expect(fileService.readDirectory('/non-existent'))
-      .rejects.toThrow();
+    await expect(fileService.readDirectory('/non-existent')).rejects.toThrow();
   });
-  
+
   test('should copy file', async () => {
-    const result = await fileService.copy(
-      ['/source/file.txt'],
-      '/destination'
-    );
+    const result = await fileService.copy(['/source/file.txt'], '/destination');
     expect(result.success).toBe(true);
     expect(result.copied).toBe(1);
   });
@@ -2665,70 +2667,70 @@ test.describe('Basic Operations', () => {
     await page.goto('/');
     await page.waitForSelector('[data-testid="file-list"]');
   });
-  
+
   test('should display file list', async ({ page }) => {
     const fileList = page.locator('[data-testid="file-list"]');
     await expect(fileList).toBeVisible();
-    
+
     const items = page.locator('[data-testid="file-item"]');
     expect(await items.count()).toBeGreaterThan(0);
   });
-  
+
   test('should navigate into directory', async ({ page }) => {
     const directory = page.locator('[data-testid="file-item"][data-is-directory="true"]').first();
     await directory.dblclick();
-    
+
     await page.waitForTimeout(500);
     const pathBar = page.locator('[data-testid="path-bar"]');
     const newPath = await pathBar.textContent();
     expect(newPath).not.toBe('/');
   });
-  
+
   test('should select file with click', async ({ page }) => {
     const fileItem = page.locator('[data-testid="file-item"]').first();
     await fileItem.click();
-    
+
     await expect(fileItem).toHaveAttribute('data-selected', 'true');
   });
-  
+
   test('should mark file with space key', async ({ page }) => {
     const fileItem = page.locator('[data-testid="file-item"]').first();
     await fileItem.click();
     await page.keyboard.press('Space');
-    
+
     await expect(fileItem).toHaveAttribute('data-marked', 'true');
   });
-  
+
   test('should copy file with C key', async ({ page }) => {
     // 選取檔案
     const fileItem = page.locator('[data-testid="file-item"]').first();
     await fileItem.click();
-    
+
     // 按 C 鍵
     await page.keyboard.press('c');
-    
+
     // 確認進度對話框出現
     const progressDialog = page.locator('[data-testid="progress-dialog"]');
     await expect(progressDialog).toBeVisible();
   });
-  
+
   test('should switch panels with Tab', async ({ page }) => {
     const leftPanel = page.locator('[data-testid="left-panel"]');
     const rightPanel = page.locator('[data-testid="right-panel"]');
-    
+
     await leftPanel.click();
     await expect(leftPanel).toHaveAttribute('data-active', 'true');
-    
+
     await page.keyboard.press('Tab');
     await expect(rightPanel).toHaveAttribute('data-active', 'true');
   });
-  
+
   test('should toggle theme', async ({ page }) => {
     const themeButton = page.locator('[data-testid="theme-toggle"]');
     const html = page.locator('html');
-    
+
     await expect(html).toHaveAttribute('data-theme', 'dark');
-    
+
     await themeButton.click();
     await expect(html).toHaveAttribute('data-theme', 'light');
   });
@@ -2812,29 +2814,29 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-    
+
     runs-on: ${{ matrix.os }}
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run tests
         run: npm test
-      
+
       - name: Build
         run: npm run build
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -2844,11 +2846,11 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
-      
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -2897,100 +2899,100 @@ ipcMain.handle('update:install', () => {
 
 ## 12.1 快捷鍵完整對照表
 
-| 快捷鍵 | 功能 | 階段 |
-|--------|------|------|
-| **檔案操作** | | |
-| C | 複製 | MVP |
-| M | 移動 | MVP |
-| D | 刪除 | MVP |
-| R | 重新命名 | MVP |
-| Enter | 開啟/進入 | MVP |
-| Backspace | 返回上層 | MVP |
-| F3 | 新增資料夾 | MVP |
-| F5 | 重新整理 | MVP |
-| F2 | 重新命名 (alt) | MVP |
-| Delete | 刪除 (alt) | MVP |
-| **標記操作** | | |
-| Space | 標記/取消 | MVP |
-| T | 標記全部 | MVP |
-| U | 取消全部標記 | MVP |
-| * | 反轉標記 | MVP |
-| + | 批次標記 | Phase 2 |
-| - | 批次取消標記 | Phase 2 |
-| **導航** | | |
-| ↑↓ | 上下移動 | MVP |
-| ←→ | 展開/收合 (樹狀) | Phase 2 |
-| Home | 移至頂部 | MVP |
-| End | 移至底部 | MVP |
-| PageUp/Down | 翻頁 | MVP |
-| Tab | 切換面板 | MVP |
-| \ | 到根目錄 | MVP |
-| **選取** | | |
-| Ctrl+A | 全選 | MVP |
-| Ctrl+Click | 多選 | MVP |
-| Shift+Click | 範圍選取 | MVP |
-| Ctrl+↑↓ | 移動焦點 | MVP |
-| Shift+↑↓ | 擴展選取 | MVP |
-| **分頁** | | |
-| Ctrl+T | 新增分頁 | Phase 2 |
-| Ctrl+W | 關閉分頁 | Phase 2 |
-| Ctrl+Tab | 下一個分頁 | Phase 2 |
-| Ctrl+Shift+Tab | 上一個分頁 | Phase 2 |
-| Ctrl+1~9 | 跳至第 N 分頁 | Phase 2 |
-| **其他** | | |
-| F | 搜尋 | MVP |
-| Ctrl+F | 搜尋 (alt) | MVP |
-| Alt+P | 切換預覽 | Phase 2 |
-| Alt+Z | 壓縮 | Phase 2 |
-| Ctrl+H | 顯示隱藏檔案 | MVP |
-| F11 | 全螢幕 | MVP |
-| Ctrl+, | 設定 | MVP |
-| Ctrl+` | 終端機 | Phase 3 |
+| 快捷鍵         | 功能             | 階段    |
+| -------------- | ---------------- | ------- |
+| **檔案操作**   |                  |         |
+| C              | 複製             | MVP     |
+| M              | 移動             | MVP     |
+| D              | 刪除             | MVP     |
+| R              | 重新命名         | MVP     |
+| Enter          | 開啟/進入        | MVP     |
+| Backspace      | 返回上層         | MVP     |
+| F3             | 新增資料夾       | MVP     |
+| F5             | 重新整理         | MVP     |
+| F2             | 重新命名 (alt)   | MVP     |
+| Delete         | 刪除 (alt)       | MVP     |
+| **標記操作**   |                  |         |
+| Space          | 標記/取消        | MVP     |
+| T              | 標記全部         | MVP     |
+| U              | 取消全部標記     | MVP     |
+| \*             | 反轉標記         | MVP     |
+| +              | 批次標記         | Phase 2 |
+| -              | 批次取消標記     | Phase 2 |
+| **導航**       |                  |         |
+| ↑↓             | 上下移動         | MVP     |
+| ←→             | 展開/收合 (樹狀) | Phase 2 |
+| Home           | 移至頂部         | MVP     |
+| End            | 移至底部         | MVP     |
+| PageUp/Down    | 翻頁             | MVP     |
+| Tab            | 切換面板         | MVP     |
+| \              | 到根目錄         | MVP     |
+| **選取**       |                  |         |
+| Ctrl+A         | 全選             | MVP     |
+| Ctrl+Click     | 多選             | MVP     |
+| Shift+Click    | 範圍選取         | MVP     |
+| Ctrl+↑↓        | 移動焦點         | MVP     |
+| Shift+↑↓       | 擴展選取         | MVP     |
+| **分頁**       |                  |         |
+| Ctrl+T         | 新增分頁         | Phase 2 |
+| Ctrl+W         | 關閉分頁         | Phase 2 |
+| Ctrl+Tab       | 下一個分頁       | Phase 2 |
+| Ctrl+Shift+Tab | 上一個分頁       | Phase 2 |
+| Ctrl+1~9       | 跳至第 N 分頁    | Phase 2 |
+| **其他**       |                  |         |
+| F              | 搜尋             | MVP     |
+| Ctrl+F         | 搜尋 (alt)       | MVP     |
+| Alt+P          | 切換預覽         | Phase 2 |
+| Alt+Z          | 壓縮             | Phase 2 |
+| Ctrl+H         | 顯示隱藏檔案     | MVP     |
+| F11            | 全螢幕           | MVP     |
+| Ctrl+,         | 設定             | MVP     |
+| Ctrl+`         | 終端機           | Phase 3 |
 
 ## 12.2 支援的檔案類型圖示
 
-| 類型 | 副檔名 | 顏色 |
-|------|--------|------|
-| 資料夾 | (directory) | 黃色 |
-| 執行檔 | .exe, .bat, .cmd, .sh, .app | 綠色 |
-| 壓縮檔 | .zip, .rar, .7z, .tar, .gz | 紅色 |
-| 圖片 | .jpg, .png, .gif, .svg, .webp, .ico | 紫色 |
-| 影片 | .mp4, .avi, .mkv, .mov, .wmv | 橙色 |
-| 音訊 | .mp3, .wav, .flac, .aac, .ogg | 粉色 |
-| 文件 | .pdf, .doc, .docx, .xls, .xlsx, .ppt | 藍色 |
+| 類型   | 副檔名                               | 顏色 |
+| ------ | ------------------------------------ | ---- |
+| 資料夾 | (directory)                          | 黃色 |
+| 執行檔 | .exe, .bat, .cmd, .sh, .app          | 綠色 |
+| 壓縮檔 | .zip, .rar, .7z, .tar, .gz           | 紅色 |
+| 圖片   | .jpg, .png, .gif, .svg, .webp, .ico  | 紫色 |
+| 影片   | .mp4, .avi, .mkv, .mov, .wmv         | 橙色 |
+| 音訊   | .mp3, .wav, .flac, .aac, .ogg        | 粉色 |
+| 文件   | .pdf, .doc, .docx, .xls, .xlsx, .ppt | 藍色 |
 | 程式碼 | .js, .ts, .py, .java, .cpp, .go, .rs | 青色 |
-| 文字 | .txt, .md, .json, .xml, .yaml | 灰色 |
-| 其他 | * | 白色 |
+| 文字   | .txt, .md, .json, .xml, .yaml        | 灰色 |
+| 其他   | \*                                   | 白色 |
 
 ## 12.3 錯誤代碼對照
 
-| 代碼 | 說明 | 處理建議 |
-|------|------|----------|
-| ERR_PATH_NOT_FOUND | 路徑不存在 | 檢查路徑是否正確 |
-| ERR_PERMISSION_DENIED | 權限不足 | 以管理員身份執行 |
-| ERR_FILE_EXISTS | 檔案已存在 | 選擇覆蓋或重新命名 |
-| ERR_FILE_IN_USE | 檔案被佔用 | 關閉佔用程式 |
-| ERR_DISK_FULL | 磁碟空間不足 | 清理磁碟空間 |
-| ERR_INVALID_NAME | 無效的檔名 | 移除非法字元 |
-| ERR_PATH_TOO_LONG | 路徑過長 | 縮短路徑長度 |
-| ERR_NETWORK_ERROR | 網路錯誤 | 檢查網路連線 |
-| ERR_ARCHIVE_CORRUPTED | 壓縮檔損壞 | 重新下載或修復 |
-| ERR_PASSWORD_REQUIRED | 需要密碼 | 輸入正確密碼 |
+| 代碼                  | 說明         | 處理建議           |
+| --------------------- | ------------ | ------------------ |
+| ERR_PATH_NOT_FOUND    | 路徑不存在   | 檢查路徑是否正確   |
+| ERR_PERMISSION_DENIED | 權限不足     | 以管理員身份執行   |
+| ERR_FILE_EXISTS       | 檔案已存在   | 選擇覆蓋或重新命名 |
+| ERR_FILE_IN_USE       | 檔案被佔用   | 關閉佔用程式       |
+| ERR_DISK_FULL         | 磁碟空間不足 | 清理磁碟空間       |
+| ERR_INVALID_NAME      | 無效的檔名   | 移除非法字元       |
+| ERR_PATH_TOO_LONG     | 路徑過長     | 縮短路徑長度       |
+| ERR_NETWORK_ERROR     | 網路錯誤     | 檢查網路連線       |
+| ERR_ARCHIVE_CORRUPTED | 壓縮檔損壞   | 重新下載或修復     |
+| ERR_PASSWORD_REQUIRED | 需要密碼     | 輸入正確密碼       |
 
 ---
 
 # 十三、里程碑總結
 
-| 里程碑 | 目標日期 | 主要功能 | 狀態 |
-|--------|----------|----------|------|
-| M1: MVP | Week 6 | 基本檔案管理 | 🔲 |
-| M2: Beta | Week 14 | 分頁、書籤、壓縮 | 🔲 |
-| M3: RC | Week 26 | 雲端、同步、進階搜尋 | 🔲 |
-| M4: 1.0 | Week 30 | 穩定版發布 | 🔲 |
-| M5: 2.0 | TBD | 外掛系統、企業版 | 🔲 |
+| 里程碑   | 目標日期 | 主要功能             | 狀態 |
+| -------- | -------- | -------------------- | ---- |
+| M1: MVP  | Week 6   | 基本檔案管理         | 🔲   |
+| M2: Beta | Week 14  | 分頁、書籤、壓縮     | 🔲   |
+| M3: RC   | Week 26  | 雲端、同步、進階搜尋 | 🔲   |
+| M4: 1.0  | Week 30  | 穩定版發布           | 🔲   |
+| M5: 2.0  | TBD      | 外掛系統、企業版     | 🔲   |
 
 ---
 
-*文件版本: 1.0*  
-*建立日期: 2025-12-31*  
-*最後更新: 2025-12-31*
+_文件版本: 1.0_  
+_建立日期: 2025-12-31_  
+_最後更新: 2025-12-31_

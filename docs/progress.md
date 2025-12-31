@@ -44,7 +44,7 @@
 
 - 每個 Day（例如 P1-W02-D03）必須拆成 3–8 個原子任務（T01..T08）。
 - 每個 checkbox 必須是「單一可驗收成果」：能 build / 能操作 / 有測試通過 / 有明確手動驗收步驟。
-- 每個 checkbox 行尾都必須包含：1) 預期產物（檔案/資料夾或功能點） 2) 驗收方式（npm scripts / Vitest / Playwright / 手動步驟）。
+- 每個 checkbox 行尾都必須包含：1) 預期產物（檔案/資料夾或功能點） 2) 驗收方式（pnpm scripts / Vitest / Playwright / 手動步驟）。
 - 不允許建立「超大任務」或「不可驗收任務」。
 
 ---
@@ -60,18 +60,20 @@
   - ✅ .github/pull_request_template.md 已建立
   - ✅ .github/ISSUE_TEMPLATE/bug_report.md 已建立
   - ✅ .github/ISSUE_TEMPLATE/feature_request.md 已建立
-- [x] P1-W01-D01-BOOT-ProjectInit-T02 npm init 並安裝 Electron/React/TypeScript/Vite 基礎依賴；驗收：npm run dev 能啟動空白視窗。
+- [x] P1-W01-D01-BOOT-ProjectInit-T02 pnpm init 並安裝 Electron/React/TypeScript/Vite 基礎依賴；驗收：pnpm run dev 能啟動空白視窗。
   - ✅ 產物：package.json / vite.config.ts / electron/main.cjs / index.html
-  - ✅ 驗收：npm run dev（看到 Vite ready 且 Electron 啟動無錯；視窗載入空白頁）
+  - ✅ 驗收：pnpm run dev（看到 Vite ready 且 Electron 啟動無錯；視窗載入空白頁）
 - [x] P1-W01-D01-CI-DevEnvironment-T03 配置 ESLint/Prettier/Husky/lint-staged；驗收：npm run lint 通過且 commit 時觸發格式化。
   - ✅ 產物：eslint.config.js / .prettierrc.json / .prettierignore / .husky/pre-commit
-  - ✅ 驗收：npm run lint（已通過）；git commit 時會執行 lint-staged（Prettier + eslint --fix）
+  - ✅ 驗收：pnpm run lint（已通過）；git commit 時會執行 lint-staged（Prettier + eslint --fix）
+- [x] P1-W01-D01-REPO-PackageManager-T03 切換至 pnpm 作為套件管理；驗收：移除 package-lock.json、更新 `package.json`、`.gitignore`、`.prettierignore`、相關 docs 與 PR template，並能使用 `pnpm run dev` 啟動 dev 環境。
+  - ✅ 驗收步驟：移除 `package-lock.json`，執行 `pnpm install` 產生 `pnpm-lock.yaml`，執行 `pnpm run dev` 無錯並可開啟空白視窗。
 
 #### D03（主進程骨架）
 
 - [x] P1-W01-D03-BOOT-MainEntry-T01 建立 src/main/index.ts 設定 BrowserWindow（min 1024x768 標題）；驗收：npm run dev 啟動視窗尺寸正確。
   - ✅ 產物：src/main/index.ts（Electron 主進程入口）
-  - ✅ 驗收：npm run dev（Vite ready；Electron 使用 ts-node 載入 main 並以 1024x768 最小尺寸啟動）
+  - ✅ 驗收：pnpm run dev（Vite ready；Electron 使用 ts-node 載入 main 並以 1024x768 最小尺寸啟動）
 - [x] P1-W01-D03-IPC-IpcIndex-T02 建立 src/main/ipc/index.ts 與 channel 常數，能註冊 file/settings/system handler；驗收：單元測試/手動檢視 IPC handler 載入無錯。
   - ✅ 產物：src/main/ipc/index.ts + src/main/ipc/channels.ts（IPC_CHANNELS）
   - ✅ 驗收：npm run dev（主進程啟動時註冊 file/settings/system handlers，啟動過程無錯）；npm run lint 通過
@@ -83,7 +85,7 @@
 
 - [x] P1-W01-D05-UI-RendererBootstrap-T01 建立 src/renderer/main.tsx、App.tsx，渲染占位頁；驗收：npm run dev 顯示 React 佈局。
   - ✅ 產物：src/renderer/main.tsx、src/renderer/App.tsx、index.html（root + module script）、tsconfig.json（jsx）
-  - ✅ 驗收：npm run dev（畫面顯示 WinCV Modern + 左右面板占位）；npm run lint（已通過）
+  - ✅ 驗收：pnpm run dev（畫面顯示 WinCV Modern + 左右面板占位）；pnpm run lint（已通過）
 - [x] P1-W01-D05-BUILD-TailwindSetup-T02 配置 Tailwind/tailwind.config.js 與 styles/globals.css 深淺色基礎；驗收：開發伺服器能載入樣式無錯。
   - ✅ 產物：tailwind.config.js、postcss.config.js、src/renderer/styles/globals.css（含深/淺色 CSS 變數基礎）、src/renderer/main.tsx（引入 globals.css）
   - ✅ 驗收：npm run dev（Vite 可啟動且畫面樣式正常）；npm run lint（已通過）
@@ -176,14 +178,14 @@
 
 #### D01（打包）
 
-- [ ] P1-W06-D01-BUILD-ElectronBuilder-T01 建立 electron-builder.yml（Win/macOS/Linux）與 resources/icons；驗收：npm run build:win/mac/linux 成功產出安裝檔。
-- [ ] P1-W06-D01-BUILD-Packaging-T02 設定 npm scripts build:all 與輸出目錄；驗收：dist/ 產物包含三平台包。
+- [ ] P1-W06-D01-BUILD-ElectronBuilder-T01 建立 electron-builder.yml（Win/macOS/Linux）與 resources/icons；驗收：pnpm run build:win/mac/linux 成功產出安裝檔。
+- [ ] P1-W06-D01-BUILD-Packaging-T02 設定 pnpm scripts build:all 與輸出目錄；驗收：dist/ 產物包含三平台包。
 - [ ] P1-W06-D01-CI-BuildWorkflow-T03 建立 GitHub Actions build workflow；驗收：CI 觸發後產出 artifact。
 
 #### D03（測試）
 
-- [ ] P1-W06-D03-TEST-VitestUnit-T01 設定 Vitest 與 coverage 門檻；驗收：npm run test:unit 通過且覆蓋率報告生成。
-- [ ] P1-W06-D03-TEST-PlaywrightE2e-T02 設定 Playwright 基礎啟動測試；驗收：npm run test:e2e 通過。
+- [ ] P1-W06-D03-TEST-VitestUnit-T01 設定 Vitest 與 coverage 門檻；驗收：pnpm run test:unit 通過且覆蓋率報告生成。
+- [ ] P1-W06-D03-TEST-PlaywrightE2e-T02 設定 Playwright 基礎啟動測試；驗收：pnpm run test:e2e 通過。
 - [ ] P1-W06-D03-TEST-BasicOperationsE2e-T03 E2E 案例：列表顯示、導航、選取、標記、快捷鍵；驗收：Playwright 報告綠燈。
 
 #### D05（MVP 檢查）
@@ -410,7 +412,7 @@
 
 - [ ] P4-W29-D01-PERF-VirtualList-T01 虛擬列表效能剖析與快取優化；驗收：10000+ 檔案滾動 FPS > 50。
 - [ ] P4-W29-D01-PERF-WatchService-T02 WatchService 訂閱去抖與批次事件；驗收：大量檔案變更時 UI 無掉幀。
-- [ ] P4-W29-D01-TEST-PerfBench-T03 建立性能基準腳本；驗收：npm run bench 產生報告。
+- [ ] P4-W29-D01-TEST-PerfBench-T03 建立性能基準腳本；驗收：pnpm run bench 產生報告。
 
 #### D03
 
