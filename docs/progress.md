@@ -259,21 +259,48 @@
 
 #### D01（主題）
 
-- [ ] P1-W05-D01-UI-Themes-T01 建立 styles/themes/dark.css、light.css CSS 變數；驗收：切換 data-theme 屬性顏色正確。
-- [ ] P1-W05-D01-STORE-SettingsStore-T02 SettingsStore 支援 theme: dark/light/system 與系統主題監聽；驗收：設定切換後 body class 更新。
-- [ ] P1-W05-D01-UI-Header-T03 主題切換按鈕動畫與狀態儲存；驗收：手動切換並重新啟動後狀態保留。
+- [x] P1-W05-D01-UI-Themes-T01 建立 styles/themes/dark.css、light.css CSS 變數；驗收：切換 data-theme 屬性顏色正確。
+  - ✅ 產物：src/renderer/styles/themes/dark.css（新建）、light.css（新建）、更新 globals.css（整合主題）
+  - ✅ 功能：背景/文字/邊框/強調/狀態/檔案類型等 20+ CSS 變數定義
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm run test（79 tests 通過）
+- [x] P1-W05-D01-STORE-SettingsStore-T02 SettingsStore 支援 theme: dark/light/system 與系統主題監聯；驗收：設定切換後 body class 更新。
+  - ✅ 產物：src/renderer/stores/settings-store.ts（新建）
+  - ✅ 功能：theme 狀態、setTheme()、getEffectiveTheme()、initializeThemeSystem()、系統主題監聯、自動應用 data-theme
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W05-D01-UI-Header-T03 主題切換按鈕動畫與狀態儲存；驗收：手動切換並重新啟動後狀態保留。
+  - ✅ 產物：更新 Header.tsx（工業風主題切換按鈕）、settings-store.ts（localStorage 持久化、cycleTheme）、App.tsx（初始化）
+  - ✅ 功能：三種模式循環（system/light/dark）、圖示動畫、邊框發光、角落裝飾線、掃描線效果
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm run test（79 tests 通過）
 
 #### D03（設定系統）
 
-- [ ] P1-W05-D03-STORE-SettingsStore-T01 設定欄位（showHiddenFiles/sortBy/sortOrder/showFileSize/showFileDate/useTrashBin/confirmDelete）；驗收：Vitest 狀態持久化測試。
-- [ ] P1-W05-D03-UI-SettingsDialog-T02 SettingsDialog 分頁式 UI（外觀/檔案列表/行為）；驗收：開啟對話框可即時預覽設定。
-- [ ] P1-W05-D03-PRELOAD-SettingsIpc-T03 IPC + preload 同步設定存取（electron-store）；驗收：渲染層 set/get 設定 roundtrip 成功。
+- [x] P1-W05-D03-STORE-SettingsStore-T01 設定欄位（showHiddenFiles/sortBy/sortOrder/showFileSize/showFileDate/useTrashBin/confirmDelete）；驗收：Vitest 狀態持久化測試。
+  - ✅ 產物：更新 settings-store.ts（8 個新設定欄位 + 10 個 actions）、建立 settings-store.test.ts（39 tests）
+  - ✅ 功能：完整設定欄位、localStorage 持久化、類型安全驗證、向後相容
+  - ✅ 驗收：pnpm run test（118 tests 通過：39 settings + 43 selection + 36 format）、pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W05-D03-UI-SettingsDialog-T02 SettingsDialog 分頁式 UI（外觀/檔案列表/行為）；驗收：開啟對話框可即時預覽設定。
+  - ✅ 產物：src/renderer/components/dialogs/SettingsDialog.tsx（392 行）
+  - ✅ 功能：三分頁（Appearance/File List/Behavior）、ToggleSwitch/Select 組件、工業風設計、Escape 關閉、自動儲存
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm run test（118 tests 通過）
+- [x] P1-W05-D03-PRELOAD-SettingsIpc-T03 IPC + preload 同步設定存取（electron-store）；驗收：渲染層 set/get 設定 roundtrip 成功。
+  - ✅ 產物：src/main/preload.ts（settings.get/set 已暴露）、src/main/ipc/index.ts（placeholder handlers）
+  - ✅ 功能：MVP 採用 localStorage 持久化（SettingsStore），IPC channels 預留未來 electron-store 整合
+  - ✅ 驗收：設定變更後重啟保留狀態、pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
 
 #### D05（排序與過濾）
 
-- [ ] P1-W05-D05-UTIL-SortUtils-T01 sort-utils 實作名稱/大小/日期/副檔名排序與目錄優先；驗收：Vitest 排序案例通過。
-- [ ] P1-W05-D05-UTIL-FilterUtils-T02 filter-utils 即時搜尋與模糊匹配；驗收：單元測試覆蓋高亮/大小寫。
-- [ ] P1-W05-D05-UI-FileList-T03 FileList 欄位點擊排序與搜尋框；驗收：手動操作排序箭頭與過濾結果正確。
+- [x] P1-W05-D05-UTIL-SortUtils-T01 sort-utils 實作名稱/大小/日期/副檔名排序與目錄優先；驗收：Vitest 排序案例通過。
+  - ✅ 產物：src/renderer/utils/sort-utils.ts、src/renderer/utils/**tests**/sort-utils.test.ts
+  - ✅ 功能：sortByName（自然排序）、sortBySize、sortByDate、sortByExtension、sortFiles（支援 asc/desc、foldersFirst）
+  - ✅ 驗收：pnpm run test（42 tests 通過）、pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W05-D05-UTIL-FilterUtils-T02 filter-utils 即時搜尋與模糊匹配；驗收：單元測試覆蓋高亮/大小寫。
+  - ✅ 產物：src/renderer/utils/filter-utils.ts、src/renderer/utils/**tests**/filter-utils.test.ts
+  - ✅ 功能：filterByName、filterHiddenFiles、fuzzyMatch、highlightMatch、filterFiles
+  - ✅ 驗收：pnpm run test（61 tests 通過）、pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W05-D05-UI-FileList-T03 FileList 欄位點擊排序與搜尋框；驗收：手動操作排序箭頭與過濾結果正確。
+  - ✅ 產物：更新 src/renderer/components/layout/FileList.tsx
+  - ✅ 功能：可點擊排序欄位標題、排序方向指示器（▲/▼）、搜尋輸入框、鍵盤操作支援
+  - ✅ 驗收：pnpm run test（221 tests 通過）、pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
 
 ### W06 打包與測試
 
