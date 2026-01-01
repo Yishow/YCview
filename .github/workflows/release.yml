@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   release:
     name: Build & Release (${{ matrix.os }})
@@ -12,7 +15,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest]
+        include:
+          - os: windows-latest
+            platform: win
+          - os: macos-latest
+            platform: mac
+          - os: ubuntu-latest
+            platform: linux
 
     steps:
       - name: Checkout Code
@@ -22,20 +31,38 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
           version: 9
 
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build & Release
+      - name: Type Check
+        run: pnpm run type-check
+
+      - name: Build Renderer
+        run: pnpm exec vite build
+
+      - name: Build & Publish to GitHub Releases
         env:
-          # 需要在 GitHub Repository Settings -> Secrets 中設定 GH_TOKEN
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm run build
+        run: pnpm exec electron-builder --${{ matrix.platform }} --publish always
 
       # 若需要簽名（Windows Code Signing / macOS Notarization），需在此加入相關步驟與 Secrets
+      # Windows: CSC_LINK, CSC_KEY_PASSWORD
+      # macOS: APPLE_ID, APPLE_ID_PASSWORD, APPLE_TEAM_ID
