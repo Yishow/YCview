@@ -31,3 +31,4 @@ export const uiStore = createSimpleStore<UiState>({
 });
 
 export * from './tab-store';
+export * from './bookmark-store';

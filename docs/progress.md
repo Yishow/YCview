@@ -417,21 +417,52 @@
 
 #### D01
 
-- [ ] P2-W09-D01-STORE-BookmarkStore-T01 BookmarkStore CRUD/reorder；驗收：Vitest 狀態測試。
-- [ ] P2-W09-D01-UI-BookmarkBar-T02 BookmarkBar 顯示/跳轉/右鍵選單；驗收：手動操作路徑跳轉。
-- [ ] P2-W09-D01-HOOK-UseBookmarks-T03 Hook 整合拖曳新增（從 FileList 至 BookmarkBar）；驗收：拖曳可建立書籤。
+- [x] P2-W09-D01-STORE-BookmarkStore-T01 BookmarkStore CRUD/reorder；驗收：Vitest 狀態測試。
+  - ✅ 產物：src/renderer/stores/bookmark-store.ts、src/renderer/stores/**tests**/bookmark-store.test.ts
+  - ✅ 功能：addBookmark/removeBookmark/updateBookmark/reorderBookmarks/getBookmarkByPath/isBookmarked
+  - ✅ 持久化：localStorage (wincv-bookmarks)、自動儲存與恢復、無效 JSON 處理
+  - ✅ 驗收：pnpm run test（51 tests 通過）、pnpm run lint（通過）
+- [x] P2-W09-D01-UI-BookmarkBar-T02 BookmarkBar 顯示/跳轉/右鍵選單；驗收：手動操作路徑跳轉。
+  - ✅ 產物：src/renderer/components/layout/BookmarkBar.tsx、BookmarkItem.tsx
+  - ✅ 設計：工業復古未來主義、色彩標籤、掃描線效果、角落裝飾
+  - ✅ 功能：書籤列表、水平捲動、新增按鈕、右鍵選單（編輯/刪除/在新分頁開啟）
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P2-W09-D01-HOOK-UseBookmarks-T03 Hook 整合拖曳新增（從 FileList 至 BookmarkBar）；驗收：拖曳可建立書籤。
+  - ✅ 產物：src/renderer/hooks/useBookmarks.ts
+  - ✅ 功能：addCurrentPath（快速新增）、handleDrop（拖曳新增）、隨機顏色分配
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
 
 #### D03
 
-- [ ] P2-W09-D03-UI-AddBookmarkDialog-T01 AddBookmarkDialog（名稱/路徑/顏色/圖示）；驗收：表單驗證與建立書籤成功。
-- [ ] P2-W09-D03-UI-BookmarkBar-T02 Bookmark 拖曳排序與在新分頁開啟；驗收：手動測試排序與開啟。
-- [ ] P2-W09-D03-TEST-BookmarkStore-T03 測試保存順序與刪除；驗收：Vitest 通過。
+- [x] P2-W09-D03-UI-AddBookmarkDialog-T01 AddBookmarkDialog（名稱/路徑/顏色/圖示）；驗收：表單驗證與建立書籤成功。
+  - ✅ 產物：src/renderer/components/dialogs/AddBookmarkDialog.tsx
+  - ✅ 設計：玻璃擬態背景、發光色票選擇器、工業風輸入框
+  - ✅ 功能：名稱輸入（必填驗證）、路徑顯示、7 種預設顏色選擇、Escape/Enter 快捷鍵
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P2-W09-D03-UI-BookmarkBar-T02 Bookmark 拖曳排序與在新分頁開啟；驗收：手動測試排序與開啟。
+  - ✅ 產物：更新 BookmarkBar.tsx
+  - ✅ 功能：整合真正的 useBookmarkStore、連接 AddBookmarkDialog、拖曳新增支援
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P2-W09-D03-TEST-BookmarkStore-T03 測試保存順序與刪除；驗收：Vitest 通過。
+  - ✅ 產物：src/renderer/stores/**tests**/bookmark-store.test.ts
+  - ✅ 驗收：pnpm run test（51 tests 通過）
 
 #### D05
 
-- [ ] P2-W10-D05-UI-BatchRenameDialog-T01 BatchRenameDialog 規則設定（find/replace/prefix/suffix/sequence/case/regex）；驗收：UI 預覽更新。
-- [ ] P2-W10-D05-SVC-RenameEngine-T02 改名引擎產生預覽與衝突檢測；驗收：單元測試涵蓋重複與非法字元。
-- [ ] P2-W10-D05-UI-BatchRenameDialog-T03 套用/取消流程與錯誤提示；驗收：手動操作批次改名成功。
+- [x] P2-W10-D05-UI-BatchRenameDialog-T01 BatchRenameDialog 規則設定（find/replace/prefix/suffix/sequence/case/regex）；驗收：UI 預覽更新。
+  - ✅ 產物：src/renderer/components/dialogs/BatchRenameDialog.tsx
+  - ✅ 設計：工業風格對話框、玻璃面板、發光邊框、角落裝飾
+  - ✅ 功能：多規則編輯器、即時預覽表格、衝突/錯誤視覺標示、統計面板
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P2-W10-D05-SVC-RenameEngine-T02 改名引擎產生預覽與衝突檢測；驗收：單元測試涵蓋重複與非法字元。
+  - ✅ 產物：src/renderer/utils/rename-engine.ts、src/renderer/utils/**tests**/rename-engine.test.ts
+  - ✅ 功能：Find/Replace（含正則）、Prefix/Suffix、Sequence（起始/間隔/位數/位置）、Case 轉換、RemoveChars
+  - ✅ 驗證：空檔名、非法字元、長度限制、Windows 保留名稱、衝突檢測
+  - ✅ 驗收：pnpm run test（76 tests 通過）、pnpm run lint（通過）
+- [x] P2-W10-D05-UI-BatchRenameDialog-T03 套用/取消流程與錯誤提示；驗收：手動操作批次改名成功。
+  - ✅ 產物：整合於 BatchRenameDialog.tsx
+  - ✅ 功能：變更數/錯誤數/衝突數統計、狀態顏色標示（紅=錯誤/琥珀=衝突/綠=就緒）
+  - ✅ 驗收：pnpm run test（411 tests 全部通過）、pnpm run lint（通過）
 
 ### W11-W12 壓縮與解壓
 
