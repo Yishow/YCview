@@ -63,73 +63,84 @@ export function Header({ title, currentPath }: HeaderProps) {
   const cycleTheme = useSettingsStore((state) => state.cycleTheme);
 
   return (
-    <div className="flex items-center justify-between gap-3 px-3 py-2">
-      <div className="min-w-0">
-        <div className="font-bold tracking-wide">{title}</div>
-        <div className="truncate text-xs opacity-70">{currentPath}</div>
+    <div className="relative flex items-center justify-between gap-3 overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5">
+      <div
+        className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-[var(--color-accent)] opacity-50"
+        style={{ boxShadow: '0 0 10px var(--color-accent)' }}
+      />
+      <div className="pointer-events-none absolute right-0 top-0 h-8 w-8 border-r border-t border-[var(--color-border)] opacity-30" />
+
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline gap-3">
+          <div
+            className="text-lg font-black tracking-wider text-[var(--color-fg)] uppercase"
+            style={{ textShadow: '0 0 20px var(--color-glow)' }}
+          >
+            {title}
+          </div>
+          <div className="hidden rounded bg-[var(--color-surface)] px-1.5 py-0.5 text-[10px] font-bold tracking-widest text-[var(--color-accent)] opacity-70 sm:block">
+            V.1.0.0
+          </div>
+        </div>
+        <div className="font-mono text-xs opacity-50 flex items-center gap-2 mt-0.5">
+          <span className="text-[var(--color-accent)]">►</span>
+          <span className="truncate">{currentPath}</span>
+        </div>
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-4">
         <button
           type="button"
           onClick={cycleTheme}
-          className="group relative flex h-7 w-7 items-center justify-center rounded
-            border border-[var(--color-border)] bg-[var(--color-bg-secondary)]
-            text-[var(--color-text-secondary)] transition-all duration-200
-            hover:border-[var(--color-accent)] hover:bg-[var(--color-bg-hover)]
-            hover:text-[var(--color-accent)] hover:shadow-[0_0_8px_var(--color-glow)]
+          className="group relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-sm
+            border border-[var(--color-border)] bg-[var(--color-surface)]
+            text-[var(--color-text-secondary)] transition-all duration-300
+            hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]
             active:scale-95"
           aria-label={`切換主題：${THEME_LABELS[theme]}`}
           title={THEME_LABELS[theme]}
         >
-          <span
-            className="pointer-events-none absolute inset-0 overflow-hidden rounded opacity-0 
-              transition-opacity duration-200 group-hover:opacity-100"
-          >
-            <span
-              className="absolute inset-0 bg-gradient-to-r from-transparent 
-                via-[var(--color-accent)] to-transparent opacity-10"
-              style={{
-                animation: 'scanline 1.5s linear infinite',
-              }}
-            />
-          </span>
+          <div className="absolute inset-0 bg-[var(--color-accent)] opacity-0 transition-opacity group-hover:opacity-10" />
+
+          <div className="absolute left-0 top-0 h-1.5 w-1.5 border-l border-t border-[var(--color-border)] transition-colors group-hover:border-[var(--color-accent)]" />
+          <div className="absolute bottom-0 right-0 h-1.5 w-1.5 border-b border-r border-[var(--color-border)] transition-colors group-hover:border-[var(--color-accent)]" />
 
           <span
             className="relative z-10 flex items-center justify-center
-              transition-transform duration-300 ease-out group-hover:rotate-12"
+              transition-transform duration-500 ease-out group-hover:rotate-[360deg]"
           >
             <ThemeIcon theme={theme} />
           </span>
-
-          <span className="absolute -right-px -top-px h-1.5 w-1.5 border-r border-t border-[var(--color-border)] opacity-50" />
-          <span className="absolute -bottom-px -left-px h-1.5 w-1.5 border-b border-l border-[var(--color-border)] opacity-50" />
         </button>
 
-        <button
-          type="button"
-          className="rounded px-2 py-1 text-xs opacity-80 hover:bg-[var(--color-border)] hover:opacity-100"
-          aria-label="最小化視窗"
-          onClick={() => {}}
-        >
-          _
-        </button>
-        <button
-          type="button"
-          className="rounded px-2 py-1 text-xs opacity-80 hover:bg-[var(--color-border)] hover:opacity-100"
-          aria-label="最大化/還原視窗"
-          onClick={() => {}}
-        >
-          □
-        </button>
-        <button
-          type="button"
-          className="rounded px-2 py-1 text-xs opacity-80 hover:bg-red-500/15 hover:text-red-600 hover:opacity-100"
-          aria-label="關閉視窗"
-          onClick={() => {}}
-        >
-          ×
-        </button>
+        <div className="flex items-center gap-1 rounded-sm border border-[var(--color-border)] bg-[var(--color-surface)] p-1">
+          <button
+            type="button"
+            className="flex h-6 w-8 items-center justify-center rounded-sm text-xs opacity-60 hover:bg-[var(--color-bg)] hover:text-[var(--color-fg)] hover:opacity-100 transition-colors"
+            aria-label="最小化視窗"
+            onClick={() => {}}
+          >
+            <span className="translate-y-0.5">_</span>
+          </button>
+          <div className="h-3 w-px bg-[var(--color-border)] opacity-50" />
+          <button
+            type="button"
+            className="flex h-6 w-8 items-center justify-center rounded-sm text-xs opacity-60 hover:bg-[var(--color-bg)] hover:text-[var(--color-fg)] hover:opacity-100 transition-colors"
+            aria-label="最大化/還原視窗"
+            onClick={() => {}}
+          >
+            □
+          </button>
+          <div className="h-3 w-px bg-[var(--color-border)] opacity-50" />
+          <button
+            type="button"
+            className="flex h-6 w-8 items-center justify-center rounded-sm text-xs opacity-60 hover:bg-red-500/20 hover:text-red-500 hover:opacity-100 transition-colors"
+            aria-label="關閉視窗"
+            onClick={() => {}}
+          >
+            ×
+          </button>
+        </div>
       </div>
     </div>
   );

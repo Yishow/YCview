@@ -22,27 +22,33 @@ function ToolbarButton({ label, shortcut, disabled, onClick, ...rest }: ToolbarB
       onClick={onClick}
       disabled={disabled}
       className={`
-        group relative rounded border px-3 py-1.5 text-xs
+        group relative overflow-hidden border px-3 py-1.5 text-xs font-medium tracking-wide
         transition-all duration-200
         ${
           disabled
-            ? 'cursor-not-allowed border-[var(--color-border)] opacity-40'
-            : 'border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-bg)] hover:shadow-sm active:scale-95'
+            ? 'cursor-not-allowed border-transparent bg-transparent text-[var(--color-text-muted)] opacity-50'
+            : 'border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:shadow-[0_0_10px_rgba(59,130,246,0.1)] active:scale-95'
         }
       `}
       title={disabled ? `${label} (${shortcut}) - 需先選取檔案` : `${label} (${shortcut})`}
       {...rest}
     >
-      <span className="flex items-center gap-1.5">
-        <span>{label}</span>
+      {!disabled && (
+        <>
+          <span className="absolute -left-1 -top-1 h-2 w-2 border-b border-r border-[var(--color-accent)] opacity-0 transition-opacity group-hover:opacity-100" />
+          <span className="absolute -bottom-1 -right-1 h-2 w-2 border-l border-t border-[var(--color-accent)] opacity-0 transition-opacity group-hover:opacity-100" />
+        </>
+      )}
+
+      <span className="relative z-10 flex items-center gap-2">
+        <span className="uppercase">{label}</span>
         <kbd
           className={`
-            inline-flex items-center justify-center px-1 min-w-[18px]
-            text-[9px] font-mono font-medium uppercase tracking-wide
-            bg-[var(--color-surface)] border border-[var(--color-border)]
-            rounded-[2px] shadow-[0_1px_0_var(--color-border)]
-            opacity-70 transition-opacity duration-200
-            ${!disabled && 'group-hover:opacity-100 group-hover:bg-[var(--color-bg)] group-hover:border-[var(--color-bg)]/50 group-hover:text-[var(--color-accent)]'}
+            hidden sm:inline-flex items-center justify-center px-1.5 min-w-[20px] h-4
+            text-[9px] font-mono font-bold uppercase tracking-wider
+            bg-[var(--color-bg)] border border-[var(--color-border)]
+            opacity-50 transition-all duration-200
+            ${!disabled && 'group-hover:opacity-100 group-hover:border-[var(--color-accent)] group-hover:text-[var(--color-accent)]'}
           `}
         >
           {shortcut}
@@ -62,54 +68,76 @@ export function Toolbar({
   onRefresh,
 }: ToolbarProps) {
   return (
-    <div className="flex items-center gap-2 border-b border-[var(--color-border)] px-3 py-2">
-      <ToolbarButton
-        label="Copy"
-        shortcut="C"
-        disabled={!hasSelection}
-        onClick={onCopy}
-        data-testid="toolbar-copy"
+    <div className="relative flex items-center gap-1 overflow-x-auto border-b border-[var(--color-border)] bg-[var(--color-bg)] px-2 py-2">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage:
+            'repeating-linear-gradient(45deg, currentColor 0px, currentColor 1px, transparent 1px, transparent 10px)',
+        }}
       />
 
-      <ToolbarButton
-        label="Move"
-        shortcut="M"
-        disabled={!hasSelection}
-        onClick={onMove}
-        data-testid="toolbar-move"
-      />
+      <div className="flex items-center gap-1 p-1">
+        <ToolbarButton
+          label="Copy"
+          shortcut="C"
+          disabled={!hasSelection}
+          onClick={onCopy}
+          data-testid="toolbar-copy"
+        />
 
-      <ToolbarButton
-        label="Delete"
-        shortcut="D"
-        disabled={!hasSelection}
-        onClick={onDelete}
-        data-testid="toolbar-delete"
-      />
+        <ToolbarButton
+          label="Move"
+          shortcut="M"
+          disabled={!hasSelection}
+          onClick={onMove}
+          data-testid="toolbar-move"
+        />
 
-      <ToolbarButton
-        label="Rename"
-        shortcut="R"
-        disabled={!hasSelection}
-        onClick={onRename}
-        data-testid="toolbar-rename"
-      />
+        <ToolbarButton
+          label="Delete"
+          shortcut="D"
+          disabled={!hasSelection}
+          onClick={onDelete}
+          data-testid="toolbar-delete"
+        />
 
-      <div className="mx-1 h-6 w-px bg-[var(--color-border)] opacity-50" />
+        <ToolbarButton
+          label="Rename"
+          shortcut="R"
+          disabled={!hasSelection}
+          onClick={onRename}
+          data-testid="toolbar-rename"
+        />
+      </div>
 
-      <ToolbarButton
-        label="NewFolder"
-        shortcut="F3"
-        onClick={onNewFolder}
-        data-testid="toolbar-new-folder"
-      />
+      <div className="mx-2 h-6 w-px bg-[var(--color-border)] opacity-50 relative">
+        <div className="absolute top-0 -left-0.5 h-1 w-2 bg-[var(--color-border)]" />
+        <div className="absolute bottom-0 -left-0.5 h-1 w-2 bg-[var(--color-border)]" />
+      </div>
 
-      <ToolbarButton
-        label="Refresh"
-        shortcut="F5"
-        onClick={onRefresh}
-        data-testid="toolbar-refresh"
-      />
+      <div className="flex items-center gap-1 p-1">
+        <ToolbarButton
+          label="New Folder"
+          shortcut="F3"
+          onClick={onNewFolder}
+          data-testid="toolbar-new-folder"
+        />
+      </div>
+
+      <div className="mx-2 h-6 w-px bg-[var(--color-border)] opacity-50 relative">
+        <div className="absolute top-0 -left-0.5 h-1 w-2 bg-[var(--color-border)]" />
+        <div className="absolute bottom-0 -left-0.5 h-1 w-2 bg-[var(--color-border)]" />
+      </div>
+
+      <div className="flex items-center gap-1 p-1">
+        <ToolbarButton
+          label="Refresh"
+          shortcut="F5"
+          onClick={onRefresh}
+          data-testid="toolbar-refresh"
+        />
+      </div>
     </div>
   );
 }
