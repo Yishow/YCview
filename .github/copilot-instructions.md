@@ -17,7 +17,6 @@
 
 - 每次完成後都要更新 docs/progress.md（勾選/新增子項/填入驗收結果）。
 - 必須提供可執行的驗收方式（pnpm scripts / 測試 / 手動步驟）。
-- 執行一次可執行的驗收方式，確認無誤後再提交。
 - 繁體中文回答
 - 完成一個項目後要做詳細的review，然後 git commit，commit message 要有詳細內容及包含完成的 progress 項目編號（例如 #P1.2.3）及使用繁體中文說明。
 - 每次完成後都要更新 docs/decisions.md（若有決策事項）。
