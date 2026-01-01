@@ -190,10 +190,22 @@
 
 #### D05（前端整合）
 
-- [ ] P1-W03-D05-HOOK-UseFileOperations-T01 useFileOperations Hook 包裝 CRUD 操作與錯誤狀態；驗收：渲染層可呼叫並在失敗時回報錯誤。
-- [ ] P1-W03-D05-UI-ProgressDialog-T02 ProgressDialog 顯示進度/速度/ETA/取消；驗收：手動模擬進度事件 UI 更新。
-- [ ] P1-W03-D05-UI-ConfirmDialog-T03 ConfirmDialog 危險操作樣式；驗收：刪除前觸發確認對話。
-- [ ] P1-W03-D05-UI-ConflictDialog-T04 ConflictDialog 提供覆蓋/跳過/重新命名與套用全部；驗收：手動選擇各選項狀態正確。
+- [x] P1-W03-D05-HOOK-UseFileOperations-T01 useFileOperations Hook 包裝 CRUD 操作與錯誤狀態；驗收：渲染層可呼叫並在失敗時回報錯誤。
+  - ✅ 產物：src/renderer/hooks/useFileOperations.ts
+  - ✅ 功能：包裝 window.api.file 操作、管理 isLoading/error 狀態
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W03-D05-UI-ProgressDialog-T02 ProgressDialog 顯示進度/速度/ETA/取消；驗收：手動模擬進度事件 UI 更新。
+  - ✅ 產物：src/renderer/components/dialogs/ProgressDialog.tsx
+  - ✅ 設計亮點：工業風進度條、掃描線動畫、角落裝飾、速度/ETA 顯示
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W03-D05-UI-ConfirmDialog-T03 ConfirmDialog 危險操作樣式；驗收：刪除前觸發確認對話。
+  - ✅ 產物：src/renderer/components/dialogs/ConfirmDialog.tsx
+  - ✅ 設計亮點：情境感知樣式（default/danger）、玻璃擬態、掃描線動畫
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W03-D05-UI-ConflictDialog-T04 ConflictDialog 提供覆蓋/跳過/重新命名與套用全部；驗收：手動選擇各選項狀態正確。
+  - ✅ 產物：src/renderer/components/dialogs/ConflictDialog.tsx
+  - ✅ 設計亮點：覆蓋/跳過/重新命名選項、套用全部 checkbox、工業風設計
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
 
 ### W04 選取與快捷鍵
 
