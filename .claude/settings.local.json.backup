@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(frontend-design:frontend-design)",
+      "Skill(ralph-wiggum:ralph-loop)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(tasklist:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm install)",
+      "Bash(pnpm install:*)",
+      "Bash(echo \"pnpm dlx commitlint --edit $1\")"
+    ]
+  }
+}

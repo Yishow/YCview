@@ -137,10 +137,24 @@
 
 #### D05（通用組件）
 
-- [ ] P1-W02-D05-UI-Button-T01 Button 變體（primary/secondary/ghost/danger）與尺寸；驗收：Storybook 或範例頁展示。
-- [ ] P1-W02-D05-UI-Input-T02 Input 基本/搜尋模式含錯誤狀態；驗收：受控輸入正常、錯誤樣式可切換。
-- [ ] P1-W02-D05-UI-ContextMenu-T03 ContextMenu 支援子選單與快捷鍵提示；驗收：右鍵觸發與點擊外部關閉正常。
-- [ ] P1-W02-D05-UI-Tooltip-T04 Tooltip 延遲顯示與四向定位；驗收：UI 手動測試。
+- [x] P1-W02-D05-UI-Button-T01 Button 變體（primary/secondary/ghost/danger）與尺寸；驗收：Storybook 或範例頁展示。
+  - ✅ 產物：src/renderer/components/common/Button.tsx（工業復古未來主義設計）
+  - ✅ 設計亮點：掃描線動畫（scanline effect）、角落裝飾線、發光陰影
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm exec vite build（通過）
+- [x] P1-W02-D05-UI-Input-T02 Input 基本/搜尋模式含錯誤狀態；驗收：受控輸入正常、錯誤樣式可切換。
+  - ✅ 產物：src/renderer/components/common/Input.tsx（底線展開動畫設計）
+  - ✅ 設計亮點：Focus 時底線從中心向兩側展開、背景光暈效果、錯誤狀態紅色發光
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W02-D05-UI-ContextMenu-T03 ContextMenu 支援子選單與快捷鍵提示；驗收：右鍵觸發與點擊外部關閉正常。
+  - ✅ 產物：src/renderer/components/common/ContextMenu.tsx（Glass Panel 設計）
+  - ✅ 設計亮點：玻璃擬態背景、角落 accent 裝飾、子選單支援、快捷鍵提示、Escape 關閉
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W02-D05-UI-Tooltip-T04 Tooltip 延遲顯示與四向定位；驗收：UI 手動測試。
+  - ✅ 產物：src/renderer/components/common/Tooltip.tsx（戰術顯示器風格）
+  - ✅ 設計亮點：大寫粗體等寬字距、accent 色邊框與發光、四向定位、延遲顯示
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+  - ✅ 額外更新：src/renderer/styles/globals.css（新增動畫 keyframes 與工業風配色變數）
+  - ✅ 額外更新：src/renderer/pages/ComponentShowcase.tsx（展示所有組件互動）
 
 ### W03 檔案服務與 IPC
 
