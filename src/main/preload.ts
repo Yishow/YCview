@@ -1,7 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 import { IPC_CHANNELS } from './ipc/channels';
-import type { ReadDirectoryOptions, FileInfo, DriveInfo } from '../shared/types';
+import type {
+  ReadDirectoryOptions,
+  FileInfo,
+  DriveInfo,
+  CopyOptions,
+  MoveOptions,
+  DeleteOptions,
+} from '../shared/types';
 
 type IpcResponse<T> =
   | { success: true; data: T }
@@ -18,6 +25,24 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.FILE_GET_INFO, path),
     getDrives: (): Promise<IpcResponse<DriveInfo[]>> =>
       ipcRenderer.invoke(IPC_CHANNELS.FILE_GET_DRIVES),
+    copy: (
+      sources: string[],
+      destination: string,
+      options?: CopyOptions,
+    ): Promise<IpcResponse<boolean>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.FILE_COPY, sources, destination, options),
+    move: (
+      sources: string[],
+      destination: string,
+      options?: MoveOptions,
+    ): Promise<IpcResponse<boolean>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.FILE_MOVE, sources, destination, options),
+    delete: (paths: string[], options?: DeleteOptions): Promise<IpcResponse<boolean>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.FILE_DELETE, paths, options),
+    rename: (oldPath: string, newName: string): Promise<IpcResponse<string>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.FILE_RENAME, oldPath, newName),
+    createDirectory: (parentPath: string, name: string): Promise<IpcResponse<string>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.FILE_CREATE_DIRECTORY, parentPath, name),
   },
   settings: {
     get: () => ipcRenderer.invoke(IPC_CHANNELS.SETTINGS_GET),

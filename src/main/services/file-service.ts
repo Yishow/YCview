@@ -1,7 +1,9 @@
 import fs from 'node:fs/promises';
+import fsSync from 'node:fs';
 import path from 'node:path';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
+import { shell } from 'electron';
 
 import {
   FileInfo,
@@ -12,6 +14,10 @@ import {
   FileErrorCode,
   SortField,
   SortOrder,
+  CopyOptions,
+  MoveOptions,
+  DeleteOptions,
+  ConflictStrategy,
 } from '../../shared/types';
 
 const execAsync = promisify(exec);
@@ -55,6 +61,8 @@ function mapNodeErrorToFileError(error: NodeJS.ErrnoException, filePath: string)
       );
     case 'ENOTDIR':
       return new FileError(FileErrorCode.NOT_A_DIRECTORY, `Not a directory: ${filePath}`, filePath);
+    case 'EEXIST':
+      return new FileError(FileErrorCode.ALREADY_EXISTS, `Already exists: ${filePath}`, filePath);
     default:
       return new FileError(
         FileErrorCode.UNKNOWN_ERROR,
@@ -316,12 +324,343 @@ export async function getDrives(): Promise<DriveInfo[]> {
   return getUnixDrives();
 }
 
+const INVALID_FILENAME_CHARS = /[/:*?"<>|\\]/;
+
+function isValidFilename(name: string): boolean {
+  if (!name || name.trim() === '') return false;
+  if (name === '.' || name === '..') return false;
+  return !INVALID_FILENAME_CHARS.test(name);
+}
+
+function generateUniqueName(basePath: string, name: string, isDir: boolean): string {
+  const ext = isDir ? '' : path.extname(name);
+  const baseName = isDir ? name : path.basename(name, ext);
+  let counter = 1;
+  let newName = name;
+  let fullPath = path.join(basePath, newName);
+
+  while (true) {
+    try {
+      fsSync.accessSync(fullPath);
+      newName = ext ? `${baseName} (${counter})${ext}` : `${baseName} (${counter})`;
+      fullPath = path.join(basePath, newName);
+      counter++;
+    } catch {
+      break;
+    }
+  }
+  return newName;
+}
+
+async function resolveConflict(
+  destPath: string,
+  destDir: string,
+  name: string,
+  isDir: boolean,
+  strategy: ConflictStrategy,
+): Promise<{ action: 'proceed' | 'skip'; resolvedPath: string }> {
+  const fileExists = await exists(destPath);
+  if (!fileExists) {
+    return { action: 'proceed', resolvedPath: destPath };
+  }
+
+  switch (strategy) {
+    case 'overwrite':
+      return { action: 'proceed', resolvedPath: destPath };
+    case 'skip':
+      return { action: 'skip', resolvedPath: destPath };
+    case 'rename': {
+      const newName = generateUniqueName(destDir, name, isDir);
+      return { action: 'proceed', resolvedPath: path.join(destDir, newName) };
+    }
+  }
+}
+
+async function copyFileWithTimestamp(
+  source: string,
+  dest: string,
+  preserveTimestamps: boolean,
+): Promise<void> {
+  await fs.copyFile(source, dest);
+  if (preserveTimestamps) {
+    const stats = await fs.stat(source);
+    await fs.utimes(dest, stats.atime, stats.mtime);
+  }
+}
+
+async function copyDirectoryRecursive(
+  source: string,
+  dest: string,
+  options: CopyOptions,
+): Promise<void> {
+  const { onConflict = 'skip', preserveTimestamps = true } = options;
+
+  await fs.mkdir(dest, { recursive: true });
+
+  const entries = await fs.readdir(source, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const srcPath = path.join(source, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    console.log(`[copy] Processing: ${srcPath}`);
+
+    if (entry.isDirectory()) {
+      const { action, resolvedPath } = await resolveConflict(
+        destPath,
+        dest,
+        entry.name,
+        true,
+        onConflict,
+      );
+      if (action === 'skip') continue;
+      await copyDirectoryRecursive(srcPath, resolvedPath, options);
+    } else {
+      const { action, resolvedPath } = await resolveConflict(
+        destPath,
+        dest,
+        entry.name,
+        false,
+        onConflict,
+      );
+      if (action === 'skip') continue;
+      await copyFileWithTimestamp(srcPath, resolvedPath, preserveTimestamps);
+    }
+  }
+
+  if (preserveTimestamps) {
+    const stats = await fs.stat(source);
+    await fs.utimes(dest, stats.atime, stats.mtime);
+  }
+}
+
+export async function copy(
+  sources: string[],
+  destination: string,
+  options: CopyOptions = {},
+): Promise<void> {
+  const { onConflict = 'skip', preserveTimestamps = true } = options;
+
+  const destIsDir = await isDirectory(destination);
+  if (!destIsDir) {
+    throw new FileError(
+      FileErrorCode.NOT_A_DIRECTORY,
+      `Destination is not a directory: ${destination}`,
+      destination,
+    );
+  }
+
+  for (const source of sources) {
+    console.log(`[copy] Starting: ${source} -> ${destination}`);
+
+    try {
+      const stats = await fs.stat(source);
+      const name = path.basename(source);
+      const destPath = path.join(destination, name);
+
+      const { action, resolvedPath } = await resolveConflict(
+        destPath,
+        destination,
+        name,
+        stats.isDirectory(),
+        onConflict,
+      );
+
+      if (action === 'skip') {
+        console.log(`[copy] Skipped: ${source}`);
+        continue;
+      }
+
+      if (stats.isDirectory()) {
+        await copyDirectoryRecursive(source, resolvedPath, { onConflict, preserveTimestamps });
+      } else {
+        await copyFileWithTimestamp(source, resolvedPath, preserveTimestamps);
+      }
+
+      console.log(`[copy] Completed: ${source}`);
+    } catch (error) {
+      throw mapNodeErrorToFileError(error as NodeJS.ErrnoException, source);
+    }
+  }
+}
+
+function areSameDevice(path1: string, path2: string): boolean {
+  if (process.platform === 'win32') {
+    const drive1 = path.parse(path1).root.toUpperCase();
+    const drive2 = path.parse(path2).root.toUpperCase();
+    return drive1 === drive2;
+  }
+  return true;
+}
+
+export async function move(
+  sources: string[],
+  destination: string,
+  options: MoveOptions = {},
+): Promise<void> {
+  const { onConflict = 'skip' } = options;
+
+  const destIsDir = await isDirectory(destination);
+  if (!destIsDir) {
+    throw new FileError(
+      FileErrorCode.NOT_A_DIRECTORY,
+      `Destination is not a directory: ${destination}`,
+      destination,
+    );
+  }
+
+  for (const source of sources) {
+    console.log(`[move] Starting: ${source} -> ${destination}`);
+
+    try {
+      const stats = await fs.stat(source);
+      const name = path.basename(source);
+      const destPath = path.join(destination, name);
+
+      const { action, resolvedPath } = await resolveConflict(
+        destPath,
+        destination,
+        name,
+        stats.isDirectory(),
+        onConflict,
+      );
+
+      if (action === 'skip') {
+        console.log(`[move] Skipped: ${source}`);
+        continue;
+      }
+
+      if (areSameDevice(source, destination)) {
+        if (await exists(resolvedPath)) {
+          await fs.rm(resolvedPath, { recursive: true });
+        }
+        await fs.rename(source, resolvedPath);
+      } else {
+        if (stats.isDirectory()) {
+          await copyDirectoryRecursive(source, resolvedPath, {
+            onConflict: 'overwrite',
+            preserveTimestamps: true,
+          });
+        } else {
+          await copyFileWithTimestamp(source, resolvedPath, true);
+        }
+        await fs.rm(source, { recursive: true });
+      }
+
+      console.log(`[move] Completed: ${source}`);
+    } catch (error) {
+      throw mapNodeErrorToFileError(error as NodeJS.ErrnoException, source);
+    }
+  }
+}
+
+export async function deleteFiles(paths: string[], options: DeleteOptions = {}): Promise<void> {
+  const { useTrash = true } = options;
+
+  for (const filePath of paths) {
+    console.log(`[delete] Starting: ${filePath}, useTrash: ${useTrash}`);
+
+    try {
+      if (!(await exists(filePath))) {
+        throw new FileError(FileErrorCode.NOT_FOUND, `Path not found: ${filePath}`, filePath);
+      }
+
+      if (useTrash) {
+        await shell.trashItem(filePath);
+      } else {
+        await fs.rm(filePath, { recursive: true });
+      }
+
+      console.log(`[delete] Completed: ${filePath}`);
+    } catch (error) {
+      if (error instanceof FileError) throw error;
+      throw mapNodeErrorToFileError(error as NodeJS.ErrnoException, filePath);
+    }
+  }
+}
+
+export async function rename(oldPath: string, newName: string): Promise<string> {
+  console.log(`[rename] ${oldPath} -> ${newName}`);
+
+  if (!isValidFilename(newName)) {
+    throw new FileError(FileErrorCode.INVALID_NAME, `Invalid filename: ${newName}`, oldPath);
+  }
+
+  try {
+    if (!(await exists(oldPath))) {
+      throw new FileError(FileErrorCode.NOT_FOUND, `Path not found: ${oldPath}`, oldPath);
+    }
+
+    const dir = path.dirname(oldPath);
+    const newPath = path.join(dir, newName);
+
+    if (await exists(newPath)) {
+      throw new FileError(FileErrorCode.ALREADY_EXISTS, `File already exists: ${newPath}`, newPath);
+    }
+
+    await fs.rename(oldPath, newPath);
+    console.log(`[rename] Completed: ${newPath}`);
+    return newPath;
+  } catch (error) {
+    if (error instanceof FileError) throw error;
+    throw mapNodeErrorToFileError(error as NodeJS.ErrnoException, oldPath);
+  }
+}
+
+export async function createDirectory(parentPath: string, name: string): Promise<string> {
+  console.log(`[createDirectory] ${parentPath}/${name}`);
+
+  if (!isValidFilename(name)) {
+    throw new FileError(FileErrorCode.INVALID_NAME, `Invalid directory name: ${name}`, parentPath);
+  }
+
+  try {
+    if (!(await exists(parentPath))) {
+      throw new FileError(
+        FileErrorCode.NOT_FOUND,
+        `Parent path not found: ${parentPath}`,
+        parentPath,
+      );
+    }
+
+    if (!(await isDirectory(parentPath))) {
+      throw new FileError(
+        FileErrorCode.NOT_A_DIRECTORY,
+        `Parent is not a directory: ${parentPath}`,
+        parentPath,
+      );
+    }
+
+    const newPath = path.join(parentPath, name);
+
+    if (await exists(newPath)) {
+      throw new FileError(
+        FileErrorCode.ALREADY_EXISTS,
+        `Directory already exists: ${newPath}`,
+        newPath,
+      );
+    }
+
+    await fs.mkdir(newPath);
+    console.log(`[createDirectory] Completed: ${newPath}`);
+    return newPath;
+  } catch (error) {
+    if (error instanceof FileError) throw error;
+    throw mapNodeErrorToFileError(error as NodeJS.ErrnoException, parentPath);
+  }
+}
+
 export const FileService = {
   readDirectory,
   getFileInfo,
   getDrives,
   exists,
   isDirectory,
+  copy,
+  move,
+  deleteFiles,
+  rename,
+  createDirectory,
 };
 
 export default FileService;

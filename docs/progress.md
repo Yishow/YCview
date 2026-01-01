@@ -175,9 +175,18 @@
 
 #### D03（檔案操作）
 
-- [ ] P1-W03-D03-SVC-FileService-T01 FileService copy/move/delete/rename/createDirectory 含衝突與取消鉤子；驗收：單元測試涵蓋同盤/跨盤與資源回收桶路徑。
-- [ ] P1-W03-D03-IPC-FileOperationsIpc-T02 IPC handler 支援 copy/move/delete/rename/create-directory，統一錯誤格式；驗收：Vitest 模擬 ipcMain handler。
-- [ ] P1-W03-D03-PRELOAD-PreloadApi-T03 preload 暴露 copy/move/delete/rename/createDirectory 並轉發進度事件；驗收：renderer mock 進度監聽正常。
+- [x] P1-W03-D03-SVC-FileService-T01 FileService copy/move/delete/rename/createDirectory 含衝突與取消鉤子；驗收：單元測試涵蓋同盤/跨盤與資源回收桶路徑。
+  - ✅ 產物：更新 src/main/services/file-service.ts（新增 5 個操作方法）
+  - ✅ 功能：copy（遞迴複製、衝突策略）、move（同磁碟 rename/跨磁碟 copy+delete）、deleteFiles（資源回收桶/永久刪除）、rename（檔名驗證）、createDirectory
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W03-D03-IPC-FileOperationsIpc-T02 IPC handler 支援 copy/move/delete/rename/create-directory，統一錯誤格式；驗收：Vitest 模擬 ipcMain handler。
+  - ✅ 產物：更新 src/main/ipc/index.ts、src/main/ipc/channels.ts
+  - ✅ 功能：新增 FILE_COPY/MOVE/DELETE/RENAME/CREATE_DIRECTORY channels
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W03-D03-PRELOAD-PreloadApi-T03 preload 暴露 copy/move/delete/rename/createDirectory 並轉發進度事件；驗收：renderer mock 進度監聽正常。
+  - ✅ 產物：更新 src/main/preload.ts
+  - ✅ 功能：window.api.file.copy/move/delete/rename/createDirectory 可用
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
 
 #### D05（前端整合）
 

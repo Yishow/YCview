@@ -2,7 +2,13 @@ import { ipcMain } from 'electron';
 
 import { IPC_CHANNELS } from './channels';
 import { FileService } from '../services/file-service';
-import { FileError, ReadDirectoryOptions } from '../../shared/types';
+import {
+  FileError,
+  ReadDirectoryOptions,
+  CopyOptions,
+  MoveOptions,
+  DeleteOptions,
+} from '../../shared/types';
 
 type IpcResponse<T> =
   | { success: true; data: T }
@@ -16,6 +22,13 @@ function fail(code: string, message: string): IpcResponse<never> {
   return { success: false, error: { code, message } };
 }
 
+function handleError(error: unknown): IpcResponse<never> {
+  if (error instanceof FileError) {
+    return fail(error.code, error.message);
+  }
+  return fail('UNKNOWN_ERROR', String(error));
+}
+
 function registerFileHandlers() {
   ipcMain.handle(
     IPC_CHANNELS.FILE_READ_DIRECTORY,
@@ -24,10 +37,7 @@ function registerFileHandlers() {
         const files = await FileService.readDirectory(dirPath, options);
         return ok(files);
       } catch (error) {
-        if (error instanceof FileError) {
-          return fail(error.code, error.message);
-        }
-        return fail('UNKNOWN_ERROR', String(error));
+        return handleError(error);
       }
     },
   );
@@ -37,10 +47,7 @@ function registerFileHandlers() {
       const info = await FileService.getFileInfo(filePath);
       return ok(info);
     } catch (error) {
-      if (error instanceof FileError) {
-        return fail(error.code, error.message);
-      }
-      return fail('UNKNOWN_ERROR', String(error));
+      return handleError(error);
     }
   });
 
@@ -49,12 +56,66 @@ function registerFileHandlers() {
       const drives = await FileService.getDrives();
       return ok(drives);
     } catch (error) {
-      if (error instanceof FileError) {
-        return fail(error.code, error.message);
-      }
-      return fail('UNKNOWN_ERROR', String(error));
+      return handleError(error);
     }
   });
+
+  ipcMain.handle(
+    IPC_CHANNELS.FILE_COPY,
+    async (_event, sources: string[], destination: string, options?: CopyOptions) => {
+      try {
+        await FileService.copy(sources, destination, options);
+        return ok(true);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  );
+
+  ipcMain.handle(
+    IPC_CHANNELS.FILE_MOVE,
+    async (_event, sources: string[], destination: string, options?: MoveOptions) => {
+      try {
+        await FileService.move(sources, destination, options);
+        return ok(true);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  );
+
+  ipcMain.handle(
+    IPC_CHANNELS.FILE_DELETE,
+    async (_event, paths: string[], options?: DeleteOptions) => {
+      try {
+        await FileService.deleteFiles(paths, options);
+        return ok(true);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  );
+
+  ipcMain.handle(IPC_CHANNELS.FILE_RENAME, async (_event, oldPath: string, newName: string) => {
+    try {
+      const newPath = await FileService.rename(oldPath, newName);
+      return ok(newPath);
+    } catch (error) {
+      return handleError(error);
+    }
+  });
+
+  ipcMain.handle(
+    IPC_CHANNELS.FILE_CREATE_DIRECTORY,
+    async (_event, parentPath: string, name: string) => {
+      try {
+        const newPath = await FileService.createDirectory(parentPath, name);
+        return ok(newPath);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  );
 }
 
 function registerSettingsHandlers() {
