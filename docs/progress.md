@@ -357,21 +357,61 @@
 
 #### D01
 
-- [ ] P2-W07-D01-STORE-TabStore-T01 TabStore 結構（tabs/activeTabId/add/remove/switch/move/duplicate）；驗收：Vitest 操作測試。
-- [ ] P2-W07-D01-UI-TabBar-T02 TabBar 基本渲染與新增分頁按鈕；驗收：手動新增/切換分頁。
-- [ ] P2-W07-D01-UI-TabOverflow-T03 Tab overflow 箭頭/下拉處理；驗收：多於 8 個分頁仍可操作。
+- [x] P2-W07-D01-STORE-TabStore-T01 TabStore 結構（tabs/activeTabId/add/remove/switch/move/duplicate）；驗收：Vitest 操作測試。
+  - ✅ 產物：src/renderer/stores/tab-store.ts、src/renderer/stores/**tests**/tab-store.test.ts
+  - ✅ 功能：Tab 完整介面、addTab/removeTab/switchTab/moveTab/duplicateTab/updateTab/pinTab/closeOtherTabs/closeTabsToTheRight
+  - ✅ 驗收：pnpm run test（63 tests 通過）、pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P2-W07-D01-UI-TabBar-T02 TabBar 基本渲染與新增分頁按鈕；驗收：手動新增/切換分頁。
+  - ✅ 產物：src/renderer/components/layout/TabBar.tsx、src/renderer/components/layout/Tab.tsx
+  - ✅ 設計：工業復古未來主義風格、掃描線動畫、角落裝飾、發光效果
+  - ✅ 功能：分頁列表渲染、新增分頁按鈕、整合 TabStore
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P2-W07-D01-UI-TabOverflow-T03 Tab overflow 箭頭/下拉處理；驗收：多於 8 個分頁仍可操作。
+  - ✅ 產物：更新 src/renderer/components/layout/TabBar.tsx
+  - ✅ 功能：ResizeObserver 偵測 overflow、左右箭頭導航、下拉選單顯示所有分頁
+  - ✅ 設計：工業風箭頭按鈕、glass-panel 下拉選單、平滑滾動
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
 
 #### D03
 
-- [ ] P2-W07-D03-UI-Tab-T01 Tab 標籤可編輯標題、關閉按鈕、拖曳排序；驗收：手動拖曳與關閉。
-- [ ] P2-W07-D03-UI-TabContextMenu-T02 Tab 右鍵選單（關閉/關閉其他/右側/複製）；驗收：操作結果正確。
-- [ ] P2-W07-D03-HOOK-UseKeyboardShortcuts-T03 分頁快捷鍵（Ctrl+T/Ctrl+W/Ctrl+Tab/Ctrl+Shift+Tab/Ctrl+1~9）；驗收：手動觸發切換。
+- [x] P2-W07-D03-UI-Tab-T01 Tab 標籤可編輯標題、關閉按鈕、拖曳排序；驗收：手動拖曳與關閉。
+  - ✅ 產物：更新 src/renderer/components/layout/Tab.tsx、TabBar.tsx
+  - ✅ 功能：雙擊編輯標題（Enter 確認、Escape 取消）、原生 HTML5 拖曳排序、拖曳視覺回饋
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P2-W07-D03-UI-TabContextMenu-T02 Tab 右鍵選單（關閉/關閉其他/右側/複製）；驗收：操作結果正確。
+  - ✅ 產物：更新 src/renderer/components/layout/Tab.tsx
+  - ✅ 功能：關閉分頁、關閉其他分頁、關閉右側分頁、複製分頁、釘選/取消釘選
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P2-W07-D03-HOOK-UseKeyboardShortcuts-T03 分頁快捷鍵（Ctrl+T/Ctrl+W/Ctrl+Tab/Ctrl+Shift+Tab/Ctrl+1~9）；驗收：手動觸發切換。
+  - ✅ 產物：更新 src/renderer/hooks/useKeyboardShortcuts.ts
+  - ✅ 功能：Ctrl+T 新增分頁、Ctrl+W 關閉分頁、Ctrl+Tab 下一個、Ctrl+Shift+Tab 上一個、Ctrl+1~9 跳至第 N 個
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
 
 #### D05
 
-- [ ] P2-W07-D05-STORE-TabPersistence-T01 分頁持久化（rememberTabs 設定）；驗收：重啟後分頁狀態恢復。
-- [ ] P2-W07-D05-UI-TabLoading-T02 Tab loading/活動狀態指示；驗收：切換路徑時狀態更新。
-- [ ] P2-W07-D05-TEST-TabStore-T03 TabStore 單元測試覆蓋移動/刪除邊界；驗收：Vitest 通過。
+- [x] P2-W07-D05-STORE-TabPersistence-T01 分頁持久化（rememberTabs 設定）；驗收：重啟後分頁狀態恢復。
+  - ✅ 產物：更新 src/renderer/stores/tab-store.ts
+  - ✅ 功能：localStorage 持久化（wincv-tabs）、rememberTabs 開關、loadTabsFromStorage/saveTabsToStorage/clearTabsFromStorage
+  - ✅ 驗收：pnpm run test（63 tests 通過）、pnpm run lint（通過）
+- [x] P2-W07-D05-UI-TabLoading-T02 Tab loading/活動狀態指示；驗收：切換路徑時狀態更新。
+  - ✅ 產物：src/renderer/components/layout/Tab.tsx
+  - ✅ 功能：isLoading 狀態顯示 spinner、active 狀態 accent 色強調、pinned 狀態 📌 圖示
+  - ✅ 驗收：已整合於 Tab.tsx 組件中
+- [x] P2-W07-D05-TEST-TabStore-T03 TabStore 單元測試覆蓋移動/刪除邊界；驗收：Vitest 通過。
+  - ✅ 產物：更新 src/renderer/stores/**tests**/tab-store.test.ts
+  - ✅ 功能：14 個新增測試（持久化、邊界情況、rememberTabs 設定）
+  - ✅ 驗收：pnpm run test（284 tests 全部通過）、pnpm run lint（通過）
+
+#### UI 視覺升級（frontend-design skill）
+
+- [x] P2-W07-UI-UPGRADE-T01 使用 frontend-design skill 升級現有 UI 組件視覺設計
+  - ✅ 產物：更新 Header.tsx、Toolbar.tsx、MainLayout.tsx、StatusBar.tsx
+  - ✅ 設計：工業復古未來主義、掃描線動畫、角落裝飾線、發光效果、玻璃擬態
+  - ✅ Header：機械式主題切換、技術框架裝飾、大寫追蹤字型
+  - ✅ Toolbar：斜角按鈕、等寬快捷鍵標籤、凹槽分隔線
+  - ✅ MainLayout：戰術網格背景、TabBar 插槽、Z-index 層次
+  - ✅ StatusBar：LCD 風格計數器、掃描線進度條、LED 指示器
+  - ✅ 驗收：pnpm run test（284 tests 通過）、pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
 
 ### W09-W10 書籤與批次改名
 

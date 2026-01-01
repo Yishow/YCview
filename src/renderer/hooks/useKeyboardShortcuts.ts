@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useMemo } from 'react';
 import { useSelectionStore } from '../stores/selection-store';
+import { useTabStore } from '../stores/tab-store';
 
 export interface ShortcutDefinition {
   /** 按鍵（不區分大小寫） */
@@ -10,6 +11,8 @@ export interface ShortcutDefinition {
   requiresSingleSelection?: boolean;
   /** 是否需要 Shift 鍵 */
   requiresShift?: boolean;
+  /** 是否需要 Ctrl 鍵 */
+  requiresCtrl?: boolean;
   /** 執行的動作 */
   action: () => void;
   /** 快捷鍵描述 */
@@ -70,6 +73,8 @@ export function useKeyboardShortcuts(
   const storeUnmarkAll = useSelectionStore((state) => state.unmarkAll);
   const storeInvertMarks = useSelectionStore((state) => state.invertMarks);
   const storeSetFocus = useSelectionStore((state) => state.setFocus);
+
+  const { addTab, removeTab, switchTab, tabs, activeTabId } = useTabStore();
 
   const hasSelection = selectedItems.size > 0;
   const hasSingleSelection = selectedItems.size === 1;
@@ -208,8 +213,117 @@ export function useKeyboardShortcuts(
         action: mergedHandlers.onSwitchPanel,
         description: '切換左右面板焦點',
       },
+      {
+        key: 't',
+        requiresCtrl: true,
+        action: () => addTab(),
+        description: '新增分頁',
+      },
+      {
+        key: 'w',
+        requiresCtrl: true,
+        action: () => {
+          if (activeTabId) removeTab(activeTabId);
+        },
+        description: '關閉當前分頁',
+      },
+      {
+        key: 'Tab',
+        requiresCtrl: true,
+        action: () => {
+          if (tabs.length === 0) return;
+          const currentIndex = tabs.findIndex((t) => t.id === activeTabId);
+          const nextIndex = (currentIndex + 1) % tabs.length;
+          switchTab(tabs[nextIndex].id);
+        },
+        description: '下一個分頁',
+      },
+      {
+        key: 'Tab',
+        requiresCtrl: true,
+        requiresShift: true,
+        action: () => {
+          if (tabs.length === 0) return;
+          const currentIndex = tabs.findIndex((t) => t.id === activeTabId);
+          const prevIndex = currentIndex <= 0 ? tabs.length - 1 : currentIndex - 1;
+          switchTab(tabs[prevIndex].id);
+        },
+        description: '上一個分頁',
+      },
+      {
+        key: '1',
+        requiresCtrl: true,
+        action: () => {
+          if (tabs.length >= 1) switchTab(tabs[0].id);
+        },
+        description: '跳至第 1 個分頁',
+      },
+      {
+        key: '2',
+        requiresCtrl: true,
+        action: () => {
+          if (tabs.length >= 2) switchTab(tabs[1].id);
+        },
+        description: '跳至第 2 個分頁',
+      },
+      {
+        key: '3',
+        requiresCtrl: true,
+        action: () => {
+          if (tabs.length >= 3) switchTab(tabs[2].id);
+        },
+        description: '跳至第 3 個分頁',
+      },
+      {
+        key: '4',
+        requiresCtrl: true,
+        action: () => {
+          if (tabs.length >= 4) switchTab(tabs[3].id);
+        },
+        description: '跳至第 4 個分頁',
+      },
+      {
+        key: '5',
+        requiresCtrl: true,
+        action: () => {
+          if (tabs.length >= 5) switchTab(tabs[4].id);
+        },
+        description: '跳至第 5 個分頁',
+      },
+      {
+        key: '6',
+        requiresCtrl: true,
+        action: () => {
+          if (tabs.length >= 6) switchTab(tabs[5].id);
+        },
+        description: '跳至第 6 個分頁',
+      },
+      {
+        key: '7',
+        requiresCtrl: true,
+        action: () => {
+          if (tabs.length >= 7) switchTab(tabs[6].id);
+        },
+        description: '跳至第 7 個分頁',
+      },
+      {
+        key: '8',
+        requiresCtrl: true,
+        action: () => {
+          if (tabs.length >= 8) switchTab(tabs[7].id);
+        },
+        description: '跳至第 8 個分頁',
+      },
+      {
+        key: '9',
+        requiresCtrl: true,
+        action: () => {
+          if (tabs.length >= 1) switchTab(tabs[tabs.length - 1].id);
+        },
+        description: '跳至最後一個分頁',
+      },
     ],
-    [mergedHandlers],
+    [mergedHandlers, addTab, removeTab, switchTab, tabs, activeTabId],
   );
 
   const handleKeyDown = useCallback(
@@ -222,13 +336,23 @@ export function useKeyboardShortcuts(
       const hasAlt = event.altKey;
       const hasShift = event.shiftKey;
 
-      if (hasCtrl || hasAlt) return;
+      if (hasAlt) return;
 
       const specialKeys = ['Enter', 'Backspace', 'F3', 'F5', 'Tab', ' '];
 
       const matchedShortcut = shortcuts.find((shortcut) => {
         const isSpecialKey = specialKeys.includes(shortcut.key);
         const isShiftRequired = shortcut.requiresShift;
+        const isCtrlRequired = shortcut.requiresCtrl;
+
+        if (isCtrlRequired) {
+          if (!hasCtrl) return false;
+          if (isShiftRequired && !hasShift) return false;
+          if (!isShiftRequired && hasShift && shortcut.key === 'Tab') return false;
+          return key === shortcut.key;
+        }
+
+        if (hasCtrl) return false;
 
         if (isShiftRequired) {
           return hasShift && key === shortcut.key;

@@ -29,3 +29,5 @@ export interface UiState {
 export const uiStore = createSimpleStore<UiState>({
   activePanel: 'left',
 });
+
+export * from './tab-store';
