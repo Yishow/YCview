@@ -306,9 +306,18 @@
 
 #### D01（打包）
 
-- [ ] P1-W06-D01-BUILD-ElectronBuilder-T01 建立 electron-builder.yml（Win/macOS/Linux）與 resources/icons；驗收：pnpm run build:win/mac/linux 成功產出安裝檔。
-- [ ] P1-W06-D01-BUILD-Packaging-T02 設定 pnpm scripts build:all 與輸出目錄；驗收：dist/ 產物包含三平台包。
-- [ ] P1-W06-D01-CI-BuildWorkflow-T03 建立 GitHub Actions build workflow；驗收：CI 觸發後產出 artifact。
+- [x] P1-W06-D01-BUILD-ElectronBuilder-T01 建立 electron-builder.yml（Win/macOS/Linux）與 resources/icons；驗收：pnpm run build:win/mac/linux 成功產出安裝檔。
+  - ✅ 產物：electron-builder.yml、resources/icons/README.md
+  - ✅ 功能：Win NSIS、macOS DMG (x64/arm64)、Linux AppImage 配置
+  - ✅ 驗收：配置檔案已建立，lint/tsc 通過
+- [x] P1-W06-D01-BUILD-Packaging-T02 設定 pnpm scripts build:all 與輸出目錄；驗收：dist/ 產物包含三平台包。
+  - ✅ 產物：更新 package.json（build:win/mac/linux/all）
+  - ✅ 功能：跨平台打包指令、輸出至 release/ 目錄
+  - ✅ 驗收：pnpm run lint 通過
+- [x] P1-W06-D01-CI-BuildWorkflow-T03 建立 GitHub Actions build workflow；驗收：CI 觸發後產出 artifact。
+  - ✅ 產物：.github/workflows/build.yml
+  - ✅ 功能：多平台並行建置、上傳 artifact、7 天保留
+  - ✅ 驗收：工作流程檔案已建立
 
 #### D03（測試）
 
