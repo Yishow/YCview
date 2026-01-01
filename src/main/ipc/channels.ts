@@ -19,6 +19,11 @@ export const IPC_CHANNELS = {
 
   SYSTEM_GET_INFO: 'system:get-info',
   SYSTEM_GET_PLATFORM: 'system:get-platform',
+
+  HASH_CALCULATE: 'hash:calculate',
+  HASH_CALCULATE_BATCH: 'hash:calculate-batch',
+  HASH_VERIFY: 'hash:verify',
+  HASH_PROGRESS: 'hash:progress',
 } as const;
 
 export type IpcChannel = (typeof IPC_CHANNELS)[keyof typeof IPC_CHANNELS];

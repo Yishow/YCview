@@ -17,6 +17,12 @@ import type {
   ListResult,
   ArchiveProgress,
 } from './services/archive-service';
+import type {
+  HashAlgorithm,
+  HashResult,
+  HashProgress,
+  HashVerifyResult,
+} from './services/hash-service';
 
 type IpcResponse<T> =
   | { success: true; data: T }
@@ -84,6 +90,30 @@ const api = {
   system: {
     getInfo: () => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_GET_INFO),
     getPlatform: () => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_GET_PLATFORM),
+  },
+  hash: {
+    calculate: (filePath: string, algorithm: HashAlgorithm): Promise<IpcResponse<HashResult>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.HASH_CALCULATE, filePath, algorithm),
+    calculateBatch: (
+      filePaths: string[],
+      algorithm: HashAlgorithm,
+    ): Promise<IpcResponse<Record<string, HashResult>>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.HASH_CALCULATE_BATCH, filePaths, algorithm),
+    verify: (
+      filePath: string,
+      expectedHash: string,
+      algorithm: HashAlgorithm,
+    ): Promise<IpcResponse<HashVerifyResult>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.HASH_VERIFY, filePath, expectedHash, algorithm),
+    onProgress: (callback: (progress: HashProgress) => void): (() => void) => {
+      const handler = (_event: IpcRendererEvent, progress: HashProgress): void => {
+        callback(progress);
+      };
+      ipcRenderer.on(IPC_CHANNELS.HASH_PROGRESS, handler);
+      return () => {
+        ipcRenderer.removeListener(IPC_CHANNELS.HASH_PROGRESS, handler);
+      };
+    },
   },
 } as const;
 

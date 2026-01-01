@@ -7,6 +7,7 @@ import {
   type CompressOptions,
   type ExtractOptions,
 } from '../services/archive-service';
+import { HashService, type HashAlgorithm } from '../services/hash-service';
 import {
   FileError,
   ReadDirectoryOptions,
@@ -180,9 +181,58 @@ function registerSystemHandlers() {
   ipcMain.handle(IPC_CHANNELS.SYSTEM_GET_PLATFORM, async () => ok(process.platform));
 }
 
+function registerHashHandlers() {
+  ipcMain.handle(
+    IPC_CHANNELS.HASH_CALCULATE,
+    async (event, filePath: string, algorithm: HashAlgorithm) => {
+      try {
+        const result = await HashService.calculate(filePath, algorithm, (progress) => {
+          const win = BrowserWindow.fromWebContents(event.sender);
+          if (win) {
+            win.webContents.send(IPC_CHANNELS.HASH_PROGRESS, progress);
+          }
+        });
+        return ok(result);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  );
+
+  ipcMain.handle(
+    IPC_CHANNELS.HASH_CALCULATE_BATCH,
+    async (event, filePaths: string[], algorithm: HashAlgorithm) => {
+      try {
+        const result = await HashService.calculateBatch(filePaths, algorithm, (progress) => {
+          const win = BrowserWindow.fromWebContents(event.sender);
+          if (win) {
+            win.webContents.send(IPC_CHANNELS.HASH_PROGRESS, progress);
+          }
+        });
+        return ok(Object.fromEntries(result));
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  );
+
+  ipcMain.handle(
+    IPC_CHANNELS.HASH_VERIFY,
+    async (_event, filePath: string, expectedHash: string, algorithm: HashAlgorithm) => {
+      try {
+        const result = await HashService.verify(filePath, expectedHash, algorithm);
+        return ok(result);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  );
+}
+
 export function registerIpcHandlers() {
   registerFileHandlers();
   registerArchiveHandlers();
   registerSettingsHandlers();
   registerSystemHandlers();
+  registerHashHandlers();
 }
