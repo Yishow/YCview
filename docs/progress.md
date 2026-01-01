@@ -160,9 +160,18 @@
 
 #### D01（檔案服務骨架）
 
-- [ ] P1-W03-D01-SVC-FileService-T01 FileService.readDirectory/getFileInfo/getDrives/exists/isDirectory 基礎實作；驗收：Vitest 單元測試覆蓋正常路徑與錯誤路徑。
-- [ ] P1-W03-D01-IPC-FileOperationsIpc-T02 IPC handler 連接 FileService（read-directory/get-info/get-drives）；驗收：renderer 透過 preload 調用獲得回傳。
-- [ ] P1-W03-D01-PRELOAD-PreloadApi-T03 preload 封裝 file:read-directory/get-info/get-drives 並回傳 IPCResponse；驗收：tsc 無錯且渲染層可呼叫。
+- [x] P1-W03-D01-SVC-FileService-T01 FileService.readDirectory/getFileInfo/getDrives/exists/isDirectory 基礎實作；驗收：Vitest 單元測試覆蓋正常路徑與錯誤路徑。
+  - ✅ 產物：src/main/services/file-service.ts、src/shared/types.ts（FileInfo/DriveInfo/FileError 類型）
+  - ✅ 功能：跨平台隱藏檔案偵測（Unix/Windows）、排序選項、目錄優先、磁碟資訊（statfs）
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W03-D01-IPC-FileOperationsIpc-T02 IPC handler 連接 FileService（read-directory/get-info/get-drives）；驗收：renderer 透過 preload 調用獲得回傳。
+  - ✅ 產物：更新 src/main/ipc/index.ts（連接 FileService 方法）
+  - ✅ 功能：統一 IpcResponse 錯誤格式、FileError 錯誤碼轉換
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W03-D01-PRELOAD-PreloadApi-T03 preload 封裝 file:read-directory/get-info/get-drives 並回傳 IPCResponse；驗收：tsc 無錯且渲染層可呼叫。
+  - ✅ 產物：更新 src/main/preload.ts（加入類型定義、修正參數傳遞）
+  - ✅ 功能：window.api.file.readDirectory/getInfo/getDrives 可用
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
 
 #### D03（檔案操作）
 

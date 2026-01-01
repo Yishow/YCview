@@ -1,6 +1,8 @@
 import { ipcMain } from 'electron';
 
 import { IPC_CHANNELS } from './channels';
+import { FileService } from '../services/file-service';
+import { FileError, ReadDirectoryOptions } from '../../shared/types';
 
 type IpcResponse<T> =
   | { success: true; data: T }
@@ -15,11 +17,44 @@ function fail(code: string, message: string): IpcResponse<never> {
 }
 
 function registerFileHandlers() {
-  ipcMain.handle(IPC_CHANNELS.FILE_READ_DIRECTORY, async () => ok([]));
-  ipcMain.handle(IPC_CHANNELS.FILE_GET_INFO, async () =>
-    fail('NOT_IMPLEMENTED', 'Not implemented'),
+  ipcMain.handle(
+    IPC_CHANNELS.FILE_READ_DIRECTORY,
+    async (_event, dirPath: string, options?: ReadDirectoryOptions) => {
+      try {
+        const files = await FileService.readDirectory(dirPath, options);
+        return ok(files);
+      } catch (error) {
+        if (error instanceof FileError) {
+          return fail(error.code, error.message);
+        }
+        return fail('UNKNOWN_ERROR', String(error));
+      }
+    },
   );
-  ipcMain.handle(IPC_CHANNELS.FILE_GET_DRIVES, async () => ok([]));
+
+  ipcMain.handle(IPC_CHANNELS.FILE_GET_INFO, async (_event, filePath: string) => {
+    try {
+      const info = await FileService.getFileInfo(filePath);
+      return ok(info);
+    } catch (error) {
+      if (error instanceof FileError) {
+        return fail(error.code, error.message);
+      }
+      return fail('UNKNOWN_ERROR', String(error));
+    }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.FILE_GET_DRIVES, async () => {
+    try {
+      const drives = await FileService.getDrives();
+      return ok(drives);
+    } catch (error) {
+      if (error instanceof FileError) {
+        return fail(error.code, error.message);
+      }
+      return fail('UNKNOWN_ERROR', String(error));
+    }
+  });
 }
 
 function registerSettingsHandlers() {
