@@ -9,7 +9,47 @@ export interface TooltipProps {
   position?: TooltipPosition;
   delay?: number;
   className?: string;
+  shortcut?: string;
 }
+
+export interface ShortcutBadgeProps {
+  shortcut: string;
+  className?: string;
+  size?: 'sm' | 'md';
+}
+
+export const ShortcutBadge = ({ shortcut, className, size = 'sm' }: ShortcutBadgeProps) => {
+  const keys = shortcut.split('+').filter(Boolean);
+
+  const sizeClasses = {
+    sm: 'text-[9px] px-1 py-0.5 min-w-[16px]',
+    md: 'text-[10px] px-1.5 py-0.5 min-w-[18px]',
+  };
+
+  return (
+    <span className={clsx('inline-flex items-center gap-0.5', className)}>
+      {keys.map((key, index) => (
+        <span key={index} className="inline-flex items-center gap-0.5">
+          <kbd
+            className={clsx(
+              'inline-flex items-center justify-center font-mono font-medium uppercase tracking-wide',
+              'bg-[var(--color-surface)] border border-[var(--color-border)]',
+              'text-[var(--color-fg)] opacity-80',
+              'shadow-[0_1px_0_var(--color-border),inset_0_0_0_0.5px_rgba(255,255,255,0.1)]',
+              'rounded-[2px]',
+              sizeClasses[size],
+            )}
+          >
+            {key.trim()}
+          </kbd>
+          {index < keys.length - 1 && (
+            <span className="text-[8px] text-[var(--color-fg)] opacity-30 mx-0.5">+</span>
+          )}
+        </span>
+      ))}
+    </span>
+  );
+};
 
 export const Tooltip = ({
   content,
@@ -17,6 +57,7 @@ export const Tooltip = ({
   position = 'top',
   delay = 300,
   className,
+  shortcut,
 }: TooltipProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -77,7 +118,10 @@ export const Tooltip = ({
             className,
           )}
         >
-          {content}
+          <span className="flex items-center gap-2">
+            <span>{content}</span>
+            {shortcut && <ShortcutBadge shortcut={shortcut} />}
+          </span>
 
           <div className="absolute inset-0 bg-[var(--color-accent)]/5 pointer-events-none" />
         </div>

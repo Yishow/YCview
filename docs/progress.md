@@ -211,21 +211,49 @@
 
 #### D01（選取/標記）
 
-- [ ] P1-W04-D01-STORE-SelectionStore-T01 SelectionStore 狀態與 actions（select/deselect/toggle/selectRange/mark/unmark/invert）；驗收：Vitest 單元測試覆蓋集合操作。
-- [ ] P1-W04-D01-HOOK-UseSelection-T02 useSelection 整合滑鼠/鍵盤邏輯（單擊、Ctrl、Shift）；驗收：FileList 中手動測試行為符合規格。
-- [ ] P1-W04-D01-UI-FileItem-T03 更新 FileItem 樣式連動選取/標記統計；驗收：狀態列顯示標記數與大小變化。
+- [x] P1-W04-D01-STORE-SelectionStore-T01 SelectionStore 狀態與 actions（select/deselect/toggle/selectRange/mark/unmark/invert）；驗收：Vitest 單元測試覆蓋集合操作。
+  - ✅ 產物：src/renderer/stores/selection-store.ts、src/renderer/stores/**tests**/selection-store.test.ts、vitest.config.ts
+  - ✅ 新增依賴：zustand（狀態管理）、vitest/jsdom/@vitest/ui（測試框架）
+  - ✅ 驗收：pnpm run test（43 tests 全部通過）、pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W04-D01-HOOK-UseSelection-T02 useSelection 整合滑鼠/鍵盤邏輯（單擊、Ctrl、Shift）；驗收：FileList 中手動測試行為符合規格。
+  - ✅ 產物：src/renderer/hooks/useSelection.ts
+  - ✅ 功能：handleClick（單擊/Ctrl/Shift 選取）、handleKeyDown（方向鍵/Home/End/PageUp/PageDown 導航）、標記操作封裝
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W04-D01-UI-FileItem-T03 更新 FileItem 樣式連動選取/標記統計；驗收：狀態列顯示標記數與大小變化。
+  - ✅ 產物：更新 FilePanel.tsx（整合 useSelection Hook）、FileItem.tsx（工業風視覺優化）、FileList.tsx（表頭樣式）
+  - ✅ 功能：單擊/Ctrl/Shift 選取、方向鍵導航、Insert 標記、Ctrl+A 全選、Escape 取消、統計列顯示
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm run test（43 tests 通過）
 
 #### D03（快捷鍵系統）
 
-- [ ] P1-W04-D03-HOOK-UseKeyboardShortcuts-T01 useKeyboardShortcuts 註冊 MVP 快捷鍵（C/M/D/R/Enter/Backspace/F3/F5）；驗收：手動操作快捷鍵觸發對應 action。
-- [ ] P1-W04-D03-HOOK-UseKeyboardShortcuts-T02 標記快捷鍵（Space/T/U/\*）與導航（Arrow/Home/End/PageUp/PageDown/Tab）；驗收：行為與規格書一致。
-- [ ] P1-W04-D03-UI-Toolbar-T03 Toolbar/ContextMenu/Tooltip 顯示快捷鍵提示；驗收：UI 顯示與動態提示一致。
+- [x] P1-W04-D03-HOOK-UseKeyboardShortcuts-T01 useKeyboardShortcuts 註冊 MVP 快捷鍵（C/M/D/R/Enter/Backspace/F3/F5）；驗收：手動操作快捷鍵觸發對應 action。
+  - ✅ 產物：src/renderer/hooks/useKeyboardShortcuts.ts（新建）、更新 App.tsx（整合 Hook）
+  - ✅ 功能：條件式觸發、防止瀏覽器預設行為、輸入框衝突處理、修飾鍵過濾
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W04-D03-HOOK-UseKeyboardShortcuts-T02 標記快捷鍵（Space/T/U/\*）與導航（Arrow/Home/End/PageUp/PageDown/Tab）；驗收：行為與規格書一致。
+  - ✅ 產物：更新 src/renderer/hooks/useKeyboardShortcuts.ts
+  - ✅ 功能：Space 標記切換、T 標記全部、U 取消標記、\* 反轉標記、Tab 切換面板；導航已在 useSelection 中處理
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm run test（43 tests 通過）
+- [x] P1-W04-D03-UI-Toolbar-T03 Toolbar/ContextMenu/Tooltip 顯示快捷鍵提示；驗收：UI 顯示與動態提示一致。
+  - ✅ 產物：更新 Tooltip.tsx（新增 ShortcutBadge 組件）、Toolbar.tsx（kbd 標籤樣式）、ContextMenu.tsx（kbd 標籤樣式）
+  - ✅ 功能：組合鍵解析、工業風格 kbd 標籤、Hover 反白效果、尺寸選項
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm run test（43 tests 通過）
 
 #### D05（狀態列與格式化）
 
-- [ ] P1-W04-D05-UI-StatusBar-T01 StatusBar 顯示檔案/目錄/選取/標記統計與磁碟剩餘；驗收：Mock 資料即時更新。
-- [ ] P1-W04-D05-UTIL-FormatUtils-T02 formatFileSize/formatDate/formatNumber 工具；驗收：Vitest 單元測試通過。
-- [ ] P1-W04-D05-UI-StatusBar-T03 StatusBar 效能優化（debounce + store 監聽）；驗收：高頻選取時無卡頓。
+- [x] P1-W04-D05-UI-StatusBar-T01 StatusBar 顯示檔案/目錄/選取/標記統計與磁碟剩餘；驗收：Mock 資料即時更新。
+  - ✅ 產物：src/renderer/components/layout/StatusBar.tsx（新建）、更新 App.tsx（整合 StatusBar）
+  - ✅ 功能：左側檔案/目錄統計、中間選取/標記統計、右側磁碟空間進度條、即時監聽 SelectionStore
+  - ✅ 設計：工業風格、動態顏色指示器、磁碟使用率變色、掃描線動畫
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm run test（79 tests 通過）
+- [x] P1-W04-D05-UTIL-FormatUtils-T02 formatFileSize/formatDate/formatNumber 工具；驗收：Vitest 單元測試通過。
+  - ✅ 產物：src/renderer/utils/format-utils.ts（214 行）、src/renderer/utils/**tests**/format-utils.test.ts（235 行）
+  - ✅ 功能：formatFileSize（自動單位選擇）、formatDate（相對時間支援）、formatNumber（千分位分隔）
+  - ✅ 驗收：pnpm run test（79 tests 通過：36 format + 43 selection）、pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
+- [x] P1-W04-D05-UI-StatusBar-T03 StatusBar 效能優化（debounce + store 監聽）；驗收：高頻選取時無卡頓。
+  - ✅ 產物：更新 src/renderer/components/layout/StatusBar.tsx
+  - ✅ 優化：useDebouncedValue（150ms）、React.memo 所有子元件、useShallow 淺層比較、useMemo 快取計算
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm run test（79 tests 通過）
 
 ### W05 主題與設定
 

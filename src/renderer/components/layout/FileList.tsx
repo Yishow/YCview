@@ -82,11 +82,11 @@ export function FileList({
   return (
     <div className="flex h-full flex-col overflow-hidden">
       {/* Header */}
-      <div className="grid grid-cols-[1fr_120px_140px_120px] items-center gap-2 border-b border-[var(--color-border)] px-3 py-2 text-xs font-medium opacity-80">
-        <div>名稱</div>
-        <div className="text-right">大小</div>
-        <div>日期</div>
-        <div>類型</div>
+      <div className="grid grid-cols-[1fr_100px_140px_80px] items-center gap-2 border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]/50 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider opacity-60">
+        <div>Name</div>
+        <div className="text-right">Size</div>
+        <div>Modified</div>
+        <div>Type</div>
       </div>
 
       {/* Empty state */}

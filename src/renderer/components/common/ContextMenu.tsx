@@ -76,14 +76,18 @@ const ContextMenuItemRow = ({ item, onClick }: { item: ContextMenuItem; onClick?
 
         <div className="flex items-center gap-3 ml-4">
           {item.shortcut && (
-            <span
+            <kbd
               className={clsx(
-                'text-[10px] opacity-50 font-mono',
-                !item.disabled && !item.danger && 'group-hover:text-black',
+                'inline-flex items-center justify-center px-1 min-w-[16px]',
+                'text-[9px] font-mono font-medium uppercase tracking-wide',
+                'bg-[var(--color-surface)] border border-[var(--color-border)]',
+                'rounded-[2px] shadow-[0_1px_0_var(--color-border)]',
+                'opacity-60',
+                !item.disabled && !item.danger && 'group-hover:opacity-100 group-hover:text-black',
               )}
             >
               {item.shortcut}
-            </span>
+            </kbd>
           )}
           {item.children && (
             <svg

@@ -22,42 +22,35 @@ export type FileItemProps = {
   onContextMenu?: (e: React.MouseEvent) => void;
 };
 
-// 顏色規則（依檔案類型）
-const getFileColor = (file: FileInfo): string => {
-  if (file.isDirectory) {
-    return 'text-yellow-400';
-  }
+const FILE_TYPE_COLORS: Record<string, string> = {
+  directory: 'text-amber-400',
+  executable: 'text-emerald-400',
+  archive: 'text-rose-400',
+  image: 'text-violet-400',
+  document: 'text-sky-400',
+  code: 'text-cyan-400',
+  default: 'text-[var(--color-text)]',
+};
+
+const EXECUTABLE_EXTS = ['.exe', '.bat', '.cmd', '.sh', '.app', '.msi'];
+const ARCHIVE_EXTS = ['.zip', '.rar', '.7z', '.tar', '.gz', '.bz2'];
+const IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.webp', '.ico'];
+const DOCUMENT_EXTS = ['.pdf', '.doc', '.docx', '.txt', '.md', '.rtf'];
+const CODE_EXTS = ['.js', '.ts', '.jsx', '.tsx', '.py', '.java', '.c', '.cpp', '.css', '.html'];
+
+function getFileColor(file: FileInfo): string {
+  if (file.isDirectory) return FILE_TYPE_COLORS.directory;
 
   const ext = file.extension?.toLowerCase() || '';
 
-  // Executable files
-  if (['.exe', '.bat', '.cmd', '.sh', '.app', '.msi'].includes(ext)) {
-    return 'text-green-400';
-  }
+  if (EXECUTABLE_EXTS.includes(ext)) return FILE_TYPE_COLORS.executable;
+  if (ARCHIVE_EXTS.includes(ext)) return FILE_TYPE_COLORS.archive;
+  if (IMAGE_EXTS.includes(ext)) return FILE_TYPE_COLORS.image;
+  if (DOCUMENT_EXTS.includes(ext)) return FILE_TYPE_COLORS.document;
+  if (CODE_EXTS.includes(ext)) return FILE_TYPE_COLORS.code;
 
-  // Archive files
-  if (['.zip', '.rar', '.7z', '.tar', '.gz', '.bz2'].includes(ext)) {
-    return 'text-red-400';
-  }
-
-  // Image files
-  if (['.jpg', '.jpeg', '.png', '.gif', '.svg', '.webp', '.ico'].includes(ext)) {
-    return 'text-purple-400';
-  }
-
-  // Document files
-  if (['.pdf', '.doc', '.docx', '.txt', '.md', '.rtf'].includes(ext)) {
-    return 'text-blue-400';
-  }
-
-  // Code files
-  if (['.js', '.ts', '.jsx', '.tsx', '.py', '.java', '.c', '.cpp', '.css', '.html'].includes(ext)) {
-    return 'text-cyan-400';
-  }
-
-  // Default
-  return 'text-[var(--color-text)]';
-};
+  return FILE_TYPE_COLORS.default;
+}
 
 function formatSize(bytes: number): string {
   if (bytes <= 0) return '-';
@@ -83,16 +76,14 @@ function FileItemComponent({
   return (
     <div
       className={clsx(
-        'grid h-[28px] grid-cols-[1fr_120px_140px_120px] items-center gap-2 px-3 text-xs',
-        'cursor-pointer select-none transition-colors',
-        // Hover 效果
-        !isSelected && 'hover:bg-[var(--color-border)]/30',
-        // Selected 狀態（最高優先）
-        isSelected && 'bg-[var(--color-accent)]/20',
-        // Marked 狀態（次優先）
-        !isSelected && isMarked && 'bg-yellow-500/10',
-        // Focused 狀態（輔助高亮）
-        isFocused && 'ring-1 ring-inset ring-[var(--color-accent)]/50',
+        'grid h-7 grid-cols-[1fr_100px_140px_80px] items-center gap-2 px-3 text-xs',
+        'cursor-pointer select-none transition-all duration-100',
+        'border-l-2',
+        !isSelected && !isMarked && !isFocused && 'border-transparent hover:bg-white/5',
+        isSelected && 'border-[var(--color-accent)] bg-[var(--color-accent)]/15',
+        !isSelected && isMarked && 'border-amber-500 bg-amber-500/10',
+        isFocused && 'ring-1 ring-inset ring-[var(--color-accent)]/60',
+        isSelected && isMarked && 'border-amber-500',
       )}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
@@ -104,30 +95,32 @@ function FileItemComponent({
       data-marked={isMarked}
       data-focused={isFocused}
     >
-      {/* 名稱欄位 */}
-      <div className="flex min-w-0 items-center gap-2">
-        {/* 標記指示器 */}
+      <div className="flex min-w-0 items-center gap-1.5">
         {isMarked && (
-          <div className="h-2 w-2 flex-shrink-0 rounded-full bg-yellow-400" aria-label="已標記" />
+          <div
+            className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-amber-400 shadow-[0_0_4px_rgba(251,191,36,0.6)]"
+            aria-label="已標記"
+          />
         )}
-
-        {/* 檔案圖示與名稱 */}
-        <div className="min-w-0 truncate">
-          <span className={clsx('mr-1.5', fileColor)}>{file.isDirectory ? '📁' : '📄'}</span>
-          <span className={clsx(isSelected && 'font-medium')}>{file.name}</span>
-        </div>
+        <span className={clsx('flex-shrink-0', fileColor)}>{file.isDirectory ? '▸' : '◦'}</span>
+        <span
+          className={clsx(
+            'min-w-0 truncate',
+            isSelected && 'font-medium text-[var(--color-accent)]',
+            isMarked && !isSelected && 'text-amber-300',
+          )}
+        >
+          {file.name}
+        </span>
       </div>
 
-      {/* 大小欄位 */}
-      <div className="text-right tabular-nums opacity-70">
-        {file.isDirectory ? '-' : formatSize(file.sizeBytes)}
+      <div className="text-right font-mono text-[10px] opacity-60">
+        {file.isDirectory ? '<DIR>' : formatSize(file.sizeBytes)}
       </div>
 
-      {/* 日期欄位 */}
-      <div className="tabular-nums opacity-70">{file.modifiedAt}</div>
+      <div className="font-mono text-[10px] opacity-60">{file.modifiedAt}</div>
 
-      {/* 類型欄位 */}
-      <div className="opacity-70">{file.type}</div>
+      <div className="font-mono text-[10px] uppercase opacity-50">{file.type}</div>
     </div>
   );
 }
