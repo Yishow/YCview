@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron';
 
 import { IPC_CHANNELS } from './ipc/channels';
 import type {
@@ -9,6 +9,14 @@ import type {
   MoveOptions,
   DeleteOptions,
 } from '../shared/types';
+import type {
+  CompressOptions,
+  ExtractOptions,
+  CompressResult,
+  ExtractResult,
+  ListResult,
+  ArchiveProgress,
+} from './services/archive-service';
 
 type IpcResponse<T> =
   | { success: true; data: T }
@@ -43,6 +51,31 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.FILE_RENAME, oldPath, newName),
     createDirectory: (parentPath: string, name: string): Promise<IpcResponse<string>> =>
       ipcRenderer.invoke(IPC_CHANNELS.FILE_CREATE_DIRECTORY, parentPath, name),
+  },
+  archive: {
+    compress: (
+      sources: string[],
+      destination: string,
+      options: CompressOptions,
+    ): Promise<IpcResponse<CompressResult>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.ARCHIVE_COMPRESS, sources, destination, options),
+    extract: (
+      archive: string,
+      destination: string,
+      options?: ExtractOptions,
+    ): Promise<IpcResponse<ExtractResult>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.ARCHIVE_EXTRACT, archive, destination, options),
+    list: (archive: string): Promise<IpcResponse<ListResult>> =>
+      ipcRenderer.invoke(IPC_CHANNELS.ARCHIVE_LIST, archive),
+    onProgress: (callback: (progress: ArchiveProgress) => void): (() => void) => {
+      const handler = (_event: IpcRendererEvent, progress: ArchiveProgress): void => {
+        callback(progress);
+      };
+      ipcRenderer.on(IPC_CHANNELS.ARCHIVE_PROGRESS, handler);
+      return () => {
+        ipcRenderer.removeListener(IPC_CHANNELS.ARCHIVE_PROGRESS, handler);
+      };
+    },
   },
   settings: {
     get: () => ipcRenderer.invoke(IPC_CHANNELS.SETTINGS_GET),

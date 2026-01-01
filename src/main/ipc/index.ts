@@ -1,7 +1,12 @@
-import { ipcMain } from 'electron';
+import { ipcMain, BrowserWindow } from 'electron';
 
 import { IPC_CHANNELS } from './channels';
 import { FileService } from '../services/file-service';
+import {
+  ArchiveService,
+  type CompressOptions,
+  type ExtractOptions,
+} from '../services/archive-service';
 import {
   FileError,
   ReadDirectoryOptions,
@@ -123,6 +128,51 @@ function registerSettingsHandlers() {
   ipcMain.handle(IPC_CHANNELS.SETTINGS_SET, async () => ok(true));
 }
 
+function registerArchiveHandlers() {
+  ipcMain.handle(
+    IPC_CHANNELS.ARCHIVE_COMPRESS,
+    async (event, sources: string[], destination: string, options: CompressOptions) => {
+      try {
+        const result = await ArchiveService.compress(sources, destination, options, (progress) => {
+          const win = BrowserWindow.fromWebContents(event.sender);
+          if (win) {
+            win.webContents.send(IPC_CHANNELS.ARCHIVE_PROGRESS, progress);
+          }
+        });
+        return ok(result);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  );
+
+  ipcMain.handle(
+    IPC_CHANNELS.ARCHIVE_EXTRACT,
+    async (event, archive: string, destination: string, options?: ExtractOptions) => {
+      try {
+        const result = await ArchiveService.extract(archive, destination, options, (progress) => {
+          const win = BrowserWindow.fromWebContents(event.sender);
+          if (win) {
+            win.webContents.send(IPC_CHANNELS.ARCHIVE_PROGRESS, progress);
+          }
+        });
+        return ok(result);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  );
+
+  ipcMain.handle(IPC_CHANNELS.ARCHIVE_LIST, async (_event, archive: string) => {
+    try {
+      const result = await ArchiveService.list(archive);
+      return ok(result);
+    } catch (error) {
+      return handleError(error);
+    }
+  });
+}
+
 function registerSystemHandlers() {
   ipcMain.handle(IPC_CHANNELS.SYSTEM_GET_INFO, async () =>
     ok({ platform: process.platform, arch: process.arch, versions: process.versions }),
@@ -132,6 +182,7 @@ function registerSystemHandlers() {
 
 export function registerIpcHandlers() {
   registerFileHandlers();
+  registerArchiveHandlers();
   registerSettingsHandlers();
   registerSystemHandlers();
 }

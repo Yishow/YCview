@@ -13,6 +13,8 @@ export interface ShortcutDefinition {
   requiresShift?: boolean;
   /** 是否需要 Ctrl 鍵 */
   requiresCtrl?: boolean;
+  /** 是否需要 Alt 鍵 */
+  requiresAlt?: boolean;
   /** 執行的動作 */
   action: () => void;
   /** 快捷鍵描述 */
@@ -42,6 +44,9 @@ export interface UseKeyboardShortcutsOptions {
     onInvertMarks?: () => void;
     // 面板操作
     onSwitchPanel?: () => void;
+    // 壓縮操作
+    onCompress?: () => void;
+    onExtract?: () => void;
   };
 }
 
@@ -112,6 +117,8 @@ export function useKeyboardShortcuts(
         }
       },
       onSwitchPanel: () => console.log('[快捷鍵] Tab - 切換面板焦點 (需要實作)'),
+      onCompress: () => console.log('[快捷鍵] Alt+Z - 壓縮選取的檔案 (需要實作)'),
+      onExtract: () => console.log('[快捷鍵] Alt+U - 解壓縮選取的壓縮檔 (需要實作)'),
     }),
     [
       focusedItem,
@@ -212,6 +219,20 @@ export function useKeyboardShortcuts(
         requiresSelection: false,
         action: mergedHandlers.onSwitchPanel,
         description: '切換左右面板焦點',
+      },
+      {
+        key: 'z',
+        requiresAlt: true,
+        requiresSelection: true,
+        action: mergedHandlers.onCompress,
+        description: '壓縮選取的檔案',
+      },
+      {
+        key: 'u',
+        requiresAlt: true,
+        requiresSelection: true,
+        action: mergedHandlers.onExtract,
+        description: '解壓縮選取的壓縮檔',
       },
       {
         key: 't',
@@ -336,14 +357,21 @@ export function useKeyboardShortcuts(
       const hasAlt = event.altKey;
       const hasShift = event.shiftKey;
 
-      if (hasAlt) return;
-
       const specialKeys = ['Enter', 'Backspace', 'F3', 'F5', 'Tab', ' '];
 
       const matchedShortcut = shortcuts.find((shortcut) => {
         const isSpecialKey = specialKeys.includes(shortcut.key);
         const isShiftRequired = shortcut.requiresShift;
         const isCtrlRequired = shortcut.requiresCtrl;
+        const isAltRequired = shortcut.requiresAlt;
+
+        if (isAltRequired) {
+          if (!hasAlt) return false;
+          if (hasCtrl) return false;
+          return key.toLowerCase() === shortcut.key.toLowerCase();
+        }
+
+        if (hasAlt) return false;
 
         if (isCtrlRequired) {
           if (!hasCtrl) return false;
