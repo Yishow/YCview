@@ -1,13 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FilePanel } from './components/layout/FilePanel';
 import { Header } from './components/layout/Header';
 import { MainLayout } from './components/layout/MainLayout';
 import { StatusBar } from './components/layout/StatusBar';
 import { Toolbar } from './components/layout/Toolbar';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { initializeThemeSystem } from './stores/settings-store';
 
 export default function App() {
   const [focusedPanel, setFocusedPanel] = useState<'left' | 'right'>('left');
+
+  useEffect(() => {
+    const cleanup = initializeThemeSystem();
+    return cleanup;
+  }, []);
 
   const handleCopy = () => console.log('[TODO] Copy');
   const handleMove = () => console.log('[TODO] Move');
