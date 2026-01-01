@@ -557,9 +557,9 @@
   - ✅ 功能：檔案資訊比較、雜湊比對、文字差異高亮、size/modTime 對比
   - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）
 - [x] P2-W14-D05-HOOK-UseFileOperations-T02 整合比較/雜湊入口（Toolbar/ContextMenu/快捷鍵）；驗收：操作流程順暢。
-  - ✅ 產物：已整合於 HashDialog/CompareDialog
-  - ✅ 功能：對話框可接收檔案路徑、模擬 API 調用就緒
-  - ✅ 驗收：pnpm run lint（通過）
+  - ✅ 產物：更新 Toolbar.tsx（Hash/Compare/Preview 按鈕）、useKeyboardShortcuts.ts（Alt+P/H/C）、App.tsx（整合 PreviewPanel/HashDialog/CompareDialog）
+  - ✅ 功能：Toolbar 新增 Hash/Compare/Preview 按鈕、Alt+P 切換預覽、Alt+H 雜湊對話框、Alt+C 比較對話框
+  - ✅ 驗收：pnpm run lint（通過）、pnpm exec tsc --noEmit（通過）、pnpm run test（411 tests 全部通過）
 - [x] P2-W14-D05-TEST-PreviewAndHash-T03 Preview/Hash/Compare E2E 路徑；驗收：Playwright 覆蓋預覽與雜湊對話。
   - ✅ 產物：UI 組件就緒，可進行 E2E 測試
   - ✅ 驗收：pnpm run test（411 tests 全部通過）

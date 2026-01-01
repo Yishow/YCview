@@ -22,13 +22,9 @@ export interface ShortcutDefinition {
 }
 
 export interface UseKeyboardShortcutsOptions {
-  /** 是否啟用快捷鍵 */
   enabled?: boolean;
-  /** 當前面板的檔案清單（路徑陣列），用於標記操作 */
   items?: string[];
-  /** 自訂快捷鍵處理函式 */
   handlers?: {
-    // 檔案操作
     onCopy?: () => void;
     onMove?: () => void;
     onDelete?: () => void;
@@ -37,16 +33,16 @@ export interface UseKeyboardShortcutsOptions {
     onBackspace?: () => void;
     onNewFolder?: () => void;
     onRefresh?: () => void;
-    // 標記操作
     onToggleMark?: () => void;
     onMarkAll?: () => void;
     onUnmarkAll?: () => void;
     onInvertMarks?: () => void;
-    // 面板操作
     onSwitchPanel?: () => void;
-    // 壓縮操作
     onCompress?: () => void;
     onExtract?: () => void;
+    onTogglePreview?: () => void;
+    onHash?: () => void;
+    onCompare?: () => void;
   };
 }
 
@@ -119,6 +115,9 @@ export function useKeyboardShortcuts(
       onSwitchPanel: () => console.log('[快捷鍵] Tab - 切換面板焦點 (需要實作)'),
       onCompress: () => console.log('[快捷鍵] Alt+Z - 壓縮選取的檔案 (需要實作)'),
       onExtract: () => console.log('[快捷鍵] Alt+U - 解壓縮選取的壓縮檔 (需要實作)'),
+      onTogglePreview: () => console.log('[快捷鍵] Alt+P - 切換預覽面板 (需要實作)'),
+      onHash: () => console.log('[快捷鍵] Alt+H - 計算雜湊 (需要實作)'),
+      onCompare: () => console.log('[快捷鍵] Alt+C - 比較檔案 (需要實作)'),
     }),
     [
       focusedItem,
@@ -233,6 +232,26 @@ export function useKeyboardShortcuts(
         requiresSelection: true,
         action: mergedHandlers.onExtract,
         description: '解壓縮選取的壓縮檔',
+      },
+      {
+        key: 'p',
+        requiresAlt: true,
+        action: mergedHandlers.onTogglePreview,
+        description: '切換預覽面板',
+      },
+      {
+        key: 'h',
+        requiresAlt: true,
+        requiresSelection: true,
+        action: mergedHandlers.onHash,
+        description: '計算選取檔案的雜湊值',
+      },
+      {
+        key: 'c',
+        requiresAlt: true,
+        requiresSelection: true,
+        action: mergedHandlers.onCompare,
+        description: '比較選取的檔案',
       },
       {
         key: 't',
